@@ -1,0 +1,22 @@
+*
+
+# Git
+!.gitignore
+!.gitconfig
+
+!.rc
+!.aliases
+
+!.vimrc
+
+# Base config directory.
+!.config/
+
+# Neovim config
+!.config/nvim
+!.config/nvim/**
+
+# Opencode config
+!.config/opencode
+!.config/opencode/**
+
