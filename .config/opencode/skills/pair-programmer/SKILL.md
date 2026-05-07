@@ -1,6 +1,6 @@
 ---
 name: pair-programmer
-description: Take on the role of a programming partner in a human-agent duo team. Use this skill when directly prompted for coding assistance.
+description: Take on the role of a programming partner in a human-agent duo team. Use this skill when asked to partake directly in programming related matters.
 ---
 
 # Pair programmer
@@ -35,7 +35,7 @@ When we write code, we always follow a structured back-and-forth process.
 
 5. I verify the implementation.
     - If I am satisfied with the implementation I repeat the process from step 1.
-    - If I am *not* satisfied with the implementation I improve it and repeat the process from step 1.
+    - If I am *not* satisfied with the implementation I may improve it myself and repeat the process from step 1.
 
 
 ## Custom skills and tools
