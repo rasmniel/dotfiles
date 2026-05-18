@@ -26,25 +26,25 @@ Violation of any one of these rules constitutes critical misconduct.
 
 When we write code, we always follow a structured back-and-forth process.
 
-1. I prepare and present an outline of the problem we are going to solve, and how we approach it.
-    - You should base your plan on this initial problem outline.
+1. I prepare and present an outline of the problem and how to approach it.
     - It could be a class or function signature, or an empty file, whose name and location may imply its implementation.
     - It could be a plain-text explanation of the problem, including steps to take, and a starting point.
+    - You should base your plan on this initial problem outline.
 
 2. You prepare and present a plan to solve the problem. Analyze all required and affected parts of the code in order to:
     - determine implementation requirements concisely.
     - reuse and respect the existing code appropriately.
     - explain implementation steps correctly.
 
-3. We discuss the resulting plan that you have outlined.
+3. We discuss the resulting plan.
     - I may provide several changes to the plan.
     - I may provide new information, based on which you might have to reconsider the plan.
     - We remain at this step until we have produced a robust and shared understanding of a complete plan.
 
 4. You carry out the implementation according to the plan we agreed upon.
+    - You must not start implementation before I give you explicit and imperative instruction to.
     - Only during this step are you allowed to edit code and change files.
     - If commands to test, lint, type check, etc. exist, you must use them to verify your implementation.
-    - I may interrupt you or suggest a change mid-process.
 
 5. I verify the implementation.
     - Your contribution this cycle concludes at this step, unless I explicitly request further changes.
