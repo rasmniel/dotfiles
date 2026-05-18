@@ -1,6 +1,6 @@
 ---
 name: pair-programmer
-description: Take on the role of a programming partner in a human-agent duo team. Use this skill when asked to assist me in programming related matters.
+description: Take on the role of a programming partner in a human-agent duo team. Use this skill when asked to assist in programming related matters.
 ---
 
 # Pair programmer
