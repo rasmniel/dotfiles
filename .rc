@@ -1,53 +1,41 @@
 # vim: set ft=sh
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# Source all .files indiscriminately
+for file in "$HOME"/.files/*; do
+    # shellcheck disable=SC1090
+    . "$file"
+done
+
+test -f "$HOME/.aliases" && . "$HOME/.aliases"
+
+# Configure Bash-specific options with `shopt`
+shopt -s histappend
+shopt -s checkwinsize
+
+# Load bash completion, if it exists
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
 fi
 
-# User defined commands below this point.
-export PATH=$PATH:/home/rani/bin
-export PATH=$PATH:/home/rani/.local/bin
-export PATH=$PATH:/home/rani/.opencode/bin
+# History control
+HISTCONTROL=ignoreboth
+HISTSIZE=1000
+HISTFILESIZE=2000
 
-# Disable caps-lock - this can also be done with gnome-tweaks
-# setxkbmap -option ctrl:nocaps
-# Can be re-enabled with `setxkbmap -option`
+# Glasgow Haskell Compiler: ghcup-env
+test -f "$HOME/.ghcup/env" && . "$HOME/.ghcup/env"
 
-# Wayland has been disabled according to https://linuxconfig.org/how-to-enable-disable-wayland-on-ubuntu-22-04-desktop
-# The reason is that external monitors appear to freeze periodically due to this issue https://askubuntu.com/questions/1407630/os-freezing-with-dual-monitors-on-ubuntu-22-04-lts
-# To reenable Wayland, edit this file `/etc/gdm3/custom.conf` and set WaylandEnable=True
+# PATH exports
+export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/.opencode/bin"
 
-# Automatic nvm setup
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Set default editors
+export SUDO_EDITOR="$HOME/bin/nvim"
+export EDITOR="$HOME/bin/nvim"
 
-# This folder now contains disable-mac-randomization.conf, which disables random mac address generation.
-# /etc/NetworkManager/conf.d
-
-[ -f "/home/rani/.ghcup/env" ] && . "/home/rani/.ghcup/env" # ghcup-env
-
+# Disable monitoring, effectively unmapping `ctrl+z` as a shortcut for `bg`.
 set +m
 
-# PS1='\u@\h:\w\$ '
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-
-# Local Trifork-specific opencode configuration, including company specific authorization.
-export OPENCODE_CONFIG=~/Dev/agent/.trifork.opencode.jsonc
-
-# Set nvim as sudo editor.
-export SUDO_EDITOR=$HOME/bin/nvim
-# export EDITOR=$HOME/bin/nvim
-export EDITOR=vi
-
-set +m
-
-# PS1='\u@\h:\w\$ '
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '

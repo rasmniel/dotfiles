@@ -4,6 +4,9 @@
 !.gitignore
 !.gitconfig
 
+!.files/
+!.files/**
+
 !.rc
 !.aliases
 

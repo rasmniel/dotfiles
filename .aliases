@@ -1,39 +1,34 @@
 # vim: set ft=sh
 
-# In GNOME terminal, ctrl+z pauses the process, blocking that keymap in Neovim.
-# Disable monitoring with ctrl+z using `set +m` before opening Neovim.
-# Although this only needs to be done once per session, the option is idempotent and can be repeated.
-alias nvim='set +m && nvim'
+alias g='git'
 
 # Edit and source .bashrc using nvim.
 alias rc='nvim ~/.bashrc'
 alias src='source ~/.bashrc'
 
+# systemctl
+alias sc='sudo systemctl'
+alias scr='sudo systemctl daemon-reload'
+
+# journalctl
+alias jc='sudo journalctl -u'
+alias jcf='sudo journalctl -o cat -f -u'
+
+# Caddy shorthands
 alias cf='sudo caddy fmt --overwrite /etc/caddy/Caddyfile'
 alias cr='sudo caddy reload --config /etc/caddy/Caddyfile'
 alias cs='sudo caddy start --config /etc/caddy/Caddyfile'
 alias ce='cf && sudoedit /etc/caddy/Caddyfile'
 
-function killport() {
-    kill -9 "$(lsof -t -i :"$1")"
-}
-
-alias g='git'
-
-alias nvim='set +m && nvim'
-
-alias rc='nvim ~/.rc'
-alias src='source ~/.rc'
-
-alias sc='sudo systemctl'
-alias scr='sudo systemctl daemon-reload'
-
-alias jc='sudo journalctl -u'
-alias jcf='sudo journalctl -o cat -f -u'
-
+# cd shorthands
 alias www='cd /var/www'
 alias sys='cd /etc/systemd/system'
 alias desktop='cd /usr/share/applications/'
+
+# Kill process listening on the given port.
+function killport() {
+    kill -9 "$(lsof -t -i :"$1")"
+}
 
 # Clipboard using xclip
 function clip() {
@@ -43,21 +38,15 @@ alias clip='clip'
 alias clip_rsa='clip ~/.ssh/id_rsa.pub'
 alias clip_ed25519='clip ~/.ssh/id_ed25519.pub'
 
-# Improvements and shortcuts for ls
+# Improvements for `ls`
 alias ls='ls --color=auto'
-alias lg='ls -la | grep'
-alias ll='ls -laA'
-alias la='ll'
+alias la='ls -lhaA'
+alias lg='la | grep'
 
+# Colors for grep
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 alias se='sudoedit'
-
-# TODO: Remove these aliases
-alias docker.all='docker ps -a -q'
-alias docker.all.kill='docker stop $(docker_all)'
-alias alltabs='google-chrome --new-window https://webmail.trifork.com/ https://tidsreg.trifork.com/ https://workflowy.com'
-alias offtabs='google-chrome --new-window https://keep.google.com/ https://discord.com/channels/@me https://www.messenger.com/'
 
