@@ -37,3 +37,9 @@ Include agent report outline for agents that should return work reports.
 Include a distinction between findings and incidents to clearly outline what should be reported.
 
 Implement Taskmaster skill and use as a replacement for the task management part of the orchestrator.
+
+Reconsider question tool usage in interrogation skill - use permission approach instead.
+
+Consider a skill/preamble that explains how to use commands optimally and which command hierarchy to traverse to find tools.
+
+Consider moving some always-required skills into a static non-optional preamble instruction that models are not responsible for loading.
