@@ -1,7 +1,7 @@
 # vim: set ft=sh
 
 # Source all .files indiscriminately
-for file in "$HOME"/.files/*; do
+for file in "$HOME"/.files/*.sh; do
     # shellcheck disable=SC1090
     . "$file"
 done
@@ -36,6 +36,6 @@ export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/.opencode/bin"
 export SUDO_EDITOR="$HOME/bin/nvim"
 export EDITOR="$HOME/bin/nvim"
 
-# Disable monitoring, effectively unmapping `ctrl+z` as a shortcut for `bg`.
+# Disable monitoring, effectively unmapping `ctrl+z` as a shortcut for `bg`
 set +m
 

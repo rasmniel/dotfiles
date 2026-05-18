@@ -4,15 +4,16 @@
 !.gitignore
 !.gitconfig
 
-!.files/
-!.files/**
-
 !.rc
 !.aliases
 
 !.vimrc
 
-# Base config directory.
+# Extra dot files
+!.files/
+!.files/**
+
+# Base config directory
 !.config/
 
 # Neovim config
