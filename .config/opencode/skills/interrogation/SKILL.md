@@ -1,6 +1,6 @@
 ---
 name: interrogation
-description: Question me relentlessly about the current plan or design until reaching shared understanding. Use this skill when critically analyzing a plan, creating a larger plan from scratch, or asked to perform interrogation.
+description: Interrogate me relentlessly about the current plan or design until reaching shared understanding. Use when critically analyzing a plan, creating a larger plan from scratch, or asked to perform interrogation.
 ---
 
 Interview me relentlessly about every aspect of the current plan until we reach a shared understanding.

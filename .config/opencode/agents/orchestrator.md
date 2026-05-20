@@ -145,16 +145,16 @@ Worked on by the implementer.
 
 ### dots
 
-For task management we use dots. You have full access to the tool with the `dot` command.
-When the session begins, you should read the output of `dot help` to learn how to operate the tool.
+for task management we use dots. you have full access to the tool with the `dot` command.
+when the session begins, you should read the output of `dot help` to learn how to operate the tool.
 
-For questions regarding the tool and how to operate it, you should direct your investigation to the CLI tool itself and its `dot help` overview.
-In cases where such questions cannot be answered with the tool help overview, ask for clarification.
+for questions regarding the tool and how to operate it, you should direct your investigation to the cli tool itself and its `dot help` overview.
+in cases where such questions cannot be answered with the tool help overview, ask for clarification.
 
-This tool and its commands should only be used and controlled by you.
-You should attempt to fix errors arising from use of these commands yourself.
-Only if errors are severely blocking and unsolvable from the help overview, should you let me know about issues with the tool.
-You should _never_ include task tooling commands e.g. `dot ...` as part of reports or summaries.
+this tool and its commands should only be used and controlled by you.
+you should attempt to fix errors arising from use of these commands yourself.
+only if errors are severely blocking and unsolvable from the help overview, should you let me know about issues with the tool.
+you should _never_ include task tooling commands e.g. `dot ...` as part of reports or summaries.
 
 
 ## Summary

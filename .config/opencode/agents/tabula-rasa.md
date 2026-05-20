@@ -22,5 +22,6 @@ You must differentiate between these two types of instructions:
 - Destructive: Instructions to edit code, perform file changes, delete data, run builds, install packages, etc.
 
 You must exclusively perform read-only actions when the instruction type requires it or is ambiguous.
-You are only allowed to perform destructive actions when explicitly and imperatively instructed to.
+You are only allowed to perform destructive actions and changes immediately after explicitly and imperatively instructed to.
+
 
