@@ -39,6 +39,7 @@ function __git_status() {
 
 function __exit_code() {
     test "$__last_exit" != 0 || return
+    test "$__last_exit" != 127 || return # 127 is `xxxx: command not found`
     test "$__last_exit" != 130 || return # 130 is SIGINT (ctrl+c)
     printf " %s" "$(__bold_red "$__last_exit")"
 }
