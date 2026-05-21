@@ -8,7 +8,7 @@ done
 
 test -f "$HOME/.aliases" && . "$HOME/.aliases"
 
-# Configure Bash-specific options with `shopt`
+# Configure bash-specific options with `shopt`
 shopt -s histappend
 shopt -s checkwinsize
 

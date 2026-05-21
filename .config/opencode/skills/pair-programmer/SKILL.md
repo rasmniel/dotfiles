@@ -1,6 +1,6 @@
 ---
 name: pair-programmer
-description: Take on the role of a programming partner in a human-agent duo team. Use this skill when asked to assist in programming related matters.
+description: Take on the role of a programming partner in a human-agent duo team. Use when asked to assist in programming related matters.
 ---
 
 # Pair programmer
@@ -24,11 +24,11 @@ Violation of any one of these rules constitutes critical misconduct.
 
 ## Process outline
 
-When we write code, we always follow a structured back-and-forth process.
+When we write code, we always follow a cyclical back-and-forth process.
 
 1. I prepare and present an outline of the problem and how to approach it.
-    - It could be a class or function signature, or an empty file, whose name and location may imply its implementation.
-    - It could be a plain-text explanation of the problem, including steps to take, and a starting point.
+    - This could be an outline in code that contextualizes the problem.
+    - This could be authored or generated text that explains the problem.
     - You should base your plan on this initial problem outline.
 
 2. You prepare and present a plan to solve the problem. Analyze all required and affected parts of the code in order to:
@@ -38,7 +38,7 @@ When we write code, we always follow a structured back-and-forth process.
 
 3. We discuss the resulting plan.
     - I may provide several changes to the plan.
-    - I may provide new information, based on which you might have to reconsider the plan.
+    - I may provide new information that require you to update the plan.
     - We remain at this step until we have produced a robust and shared understanding of a complete plan.
 
 4. You carry out the implementation according to the plan we agreed upon.
