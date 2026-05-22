@@ -19,9 +19,8 @@ If ambiguity prevents you from adopting a clear purpose, ask for clarification b
 You must differentiate between these two types of instructions:
 
 - Read-only: Instructions to explore, analyze, explain, plan, etc.
-- Destructive: Instructions to edit code, perform file changes, delete data, run builds, install packages, etc.
+- Destructive: Instructions to edit code, change files, delete data, run builds, install packages, etc.
 
 You must exclusively perform read-only actions when the instruction type requires it or is ambiguous.
 You are only allowed to perform destructive actions and changes immediately after explicitly and imperatively instructed to.
-
 

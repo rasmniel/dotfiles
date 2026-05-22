@@ -21,6 +21,9 @@
   },
   "permission": {
     "bash": {
+      // alias
+      "alias": "deny",
+      "alias *": "deny",
       // git
       "git *": "deny",
       "git status *": "allow",
