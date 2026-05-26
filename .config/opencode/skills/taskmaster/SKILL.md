@@ -11,7 +11,8 @@ You also compile tasks from the task landscape into small, coherent, workable ba
 
 ## Tasks
 
-Tasks are the ultimate source of truth that pave the way for planned features.
+Tasks represent workloads that pave the way for implementation of planned features.
+Tasks are the ultimate source of truth.
 
 All tasks must be actionable and include the following:
 
@@ -35,7 +36,6 @@ All tasks must be actionable and include the following:
 
 - By default, tasks should be created with priority level 2 unless otherwise discussed.
 
-
 ### Creating
 
 Task creation is a short process that starts with a problem being presented.
@@ -56,7 +56,6 @@ Before creating task:
 - Ensure the task description is concise, not meandering.
 - Verify the task is coherent, complete, and correct according to our discussion.
 
-
 ### Blocking
 
 A blocking task is a task that prevents another task from being completed.
@@ -74,7 +73,6 @@ For example, consider this soup analogy:
 Task 1 blocks task 2, because we need the cut the vegetables before we put them in the soup so we can boil the complete soup.
 Task 3 is indeed related to the meal as well, but we can set the table at any time without depending on or interferring with the cooking process.
 
-
 ### Claiming
 
 Tasks are claimed to indicate that work on them has begun and that no other changes should be done to the task meanwhile.
@@ -85,7 +83,6 @@ Tasks marked as claimed tasks must not be claimed again.
 In most cases, the tasking tool explains how to claim a task.
 Othewise, add a `CLAIMED` label to the task to indicate it is claimed.
 
-
 ### Closing
 
 A task should only be marked as complete when work is entirely complete.
@@ -94,7 +91,6 @@ Typically the results of a task needs to be reviewed to satisfaction before we c
 - You must never change or close tasks on your own accord.
 - You must never change tasks to resolve conflicts that arises from implementation.
 - You must never force close tasks. Task conflicts must be resolved, not overridden.
-
 
 ### Discovery
 
@@ -132,6 +128,14 @@ For tasks that outline structural reviews of the codebase, reserved for overarch
 
 **Human-in-the-loop**
 For tasks that must not be undertaken without close interaction with a human developer.
+
+
+## Output format
+
+When listing tasks, you should use a simple and consistent overview that is readable at a glance.
+
+List tasks by their respective ID, title, and labels.
+If epics or features are listed along with their sub-tasks, display them in the appropriate visual hierarchy.
 
 
 ## Quality rating
