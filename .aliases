@@ -30,6 +30,13 @@ function killport() {
     kill -9 "$(lsof -t -i :"$1")"
 }
 
+# Quickly create a project directory.
+function project() {
+    mkdir "$1" && cd "$1" && git init
+}
+alias proj="project"
+
+
 # Clipboard using xclip
 function clip() {
     < "$1" xclip -sel clip

@@ -9,15 +9,15 @@ function __store_last_exit_code() {
     __last_exit="$?"
 }
 
+# Prompt command executes before the prompt is built and can capture state left by the previous command.
+PROMPT_COMMAND='__store_last_exit_code'
+
 function __show_git() {
     # Check if cwd is inside a git repository.
     git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 1
     # Omit git prompt for home-level repository, i.e. dotfiles.
     test "$(git rev-parse --show-toplevel)" != "$HOME" || return 1
 }
-
-# Prompt command executes before the prompt is built and can capture state left by the previous command.
-PROMPT_COMMAND='__store_last_exit_code'
 
 #
 ## Build prompt
