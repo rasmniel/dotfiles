@@ -11,10 +11,6 @@ This includes explanations and descriptions of what kinds of responses are consi
 
 ## Glossary
 
-- you = the agent in charge of controlling the language model.
-- I/me = the human developer controlling the flow of development.
-- we/us = the team composed of a developer and an agent, i.e. you and me.
-
 When talking about me in the third person you must refer to me as a "human" _and_ a "developer".
 You must _never_ refer to me as just a generic "human" or as just a generic "user".
 An acceptable way to refer to me when talking about me would be "the human developer".
