@@ -78,6 +78,12 @@ local lsps = {
 
     csharp_ls = {},
     gopls = {},
+    kotlin_lsp = {
+        cmd = {
+            vim.fn.expand('~/.local/share/nvim/mason/bin/intellij-server'),
+            '--stdio',
+        },
+    },
 }
 
 local formatters = {
