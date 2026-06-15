@@ -1,13 +1,19 @@
 # vim: set ft=sh
 
-# Terminal codes are documented here `man 4 console_codes`
-
+# Terminal codes are documented here `man 4 console_codes`.
+# The following terminal codes are used to create the color line.
+#
+#   \001 = start non-printing characters (reqired in colored prompt)
+#   \033[%sm = start color provided by %s
+#   \002 = end non-printing characters (reqired in colored prompt)
+#   \033[0m = end any color
+#
 function __color() {
     local style_code="$1"
     local color_code="$2"
-    ## Shift twice, removing both codes for style and color.
+    ## Shift arguments twice, removing both codes for style and color.
     shift && shift
-    printf '\033[%sm%s\033[0m' "$style_code;$color_code" "$*"
+    printf '\001\033[%sm\002%s\001\033[0m\002' "$style_code;$color_code" "$*"
 }
 
 declare -A colors

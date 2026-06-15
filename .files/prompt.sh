@@ -10,7 +10,7 @@ function __store_last_exit_code() {
 }
 
 # Prompt command executes before the prompt is built and can capture state left by the previous command.
-PROMPT_COMMAND='__store_last_exit_code'
+PROMPT_COMMAND='__store_last_exit_code; '"$PROMPT_COMMAND"
 
 function __show_git() {
     # Check if cwd is inside a git repository.
