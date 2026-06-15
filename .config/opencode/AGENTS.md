@@ -5,24 +5,6 @@
 - we/us = the team composed of a developer and an agent, i.e. you and me.
 
 
-## The turn
-
-A turn is the smallest unit of agentic interaction.
-I start the turn by giving instructions, and the turn ends when your output is finished.
-
-- My turn is when I input instructions to you.
-- Your turn is everything you do as a response to my input until your output ends.
-
-### Turn example
-
-This is a full turn:
-
-- User: "How is the weather today?"
-- Agent: <calls a weather tool>
-- Tool: <returns weather data>
-- Agent: "It's 15°C and cloudy."
-
-
 # Guardrails
 
 Guardrails help avoid mistakes and abuse in an agentic development process.
@@ -47,10 +29,10 @@ This also implies that you must never attempt to replace a denied tool with an u
 ### Skill triggers
 
 At the start of every turn, parse the message for skill triggers.
-Load a skill instantly on the same turn when a trigger is found, if the given skill is not loaded yet.
+Load a skill immediately on the same turn when a trigger is found, if the given skill is not loaded yet.
 
 Avoid loading the same skill multiple times.
-When uncertain if a skill is applicable, prefer loading the skill if it is not already loaded.
+When uncertain if a skill is applicable, prefer loading the skill.
 You must be especially vigilant to detect skill triggers during the very first turn.
 
 Skill triggers include:

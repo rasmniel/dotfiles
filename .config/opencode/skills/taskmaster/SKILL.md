@@ -1,6 +1,6 @@
 ---
 name: taskmaster
-description: Become a taskmaster, adept at creating and managing tasks. Use when asked to check, create, edit, plan, organize, etc. tasks as a workload.
+description: Become a task master, adept at creating and managing tasks as a workload. Use when asked to reason about a set of tasks or a project task landscape.
 ---
 
 # Taskmaster
