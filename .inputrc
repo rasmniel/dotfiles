@@ -1,0 +1,35 @@
+# Find all bindable readline configurations:
+#   `bind -p`
+# Find already bound readline configurations:
+#   `bind -v`
+
+# Disable bell sound.
+set bell-style none
+
+# Completion
+set colored-stats on
+set visible-stats on
+set completion-ignore-case on
+set completion-map-case on
+
+# Ensure bracketed paste is retained.
+# Alternatively pasting is performed like keystrokes.
+set enable-bracketed-paste on
+
+# Disable active regions
+set enable-active-region off
+
+# Enable vi-mode.
+set editing-mode vi
+# Improve vi-mode in prompt.
+set show-mode-in-prompt on
+# Cursor character options for vi-mode editing.
+# | Type        | Blink     | Steady
+# |-------------|-----------|-------
+# | block       | 0, 1      | 2
+# | underline   | 3         | 4
+# | bar         | 5         | 6
+# Set modal cursor for vi editing-mode.
+set vi-cmd-mode-string "\1\e[2 q\2"
+set vi-ins-mode-string "\1\e[6 q\2"
+

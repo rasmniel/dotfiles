@@ -4,12 +4,15 @@
 !.gitignore
 !.gitconfig
 
+# Core
 !.rc
 !.aliases
 
+# Extras
 !.vimrc
+!.inputrc
 
-# Extra dot files
+# Arbitrary dot files
 !.files/
 !.files/**
 
