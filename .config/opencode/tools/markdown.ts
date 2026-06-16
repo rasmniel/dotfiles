@@ -22,9 +22,7 @@ export const frontmatter_field = tool({
     },
     execute: async (args) => {
         const markdown = await readFileContent(args.path)
-        const field = args.field
-        const value = Frontmatter.inlineField(markdown, field)
-        return value
+        return Frontmatter.inlineField(markdown, args.field)
     }
 })
 

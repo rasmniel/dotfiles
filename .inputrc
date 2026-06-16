@@ -1,3 +1,6 @@
+# Readline shortcuts:
+#   https://gist.github.com/jottr/a2351377b7584abf100b
+#
 # Find all bindable readline configurations:
 #   `bind -p`
 # Find already bound readline configurations:
