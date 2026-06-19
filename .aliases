@@ -1,6 +1,8 @@
 # vim: set ft=sh
 
 alias g='git'
+# Clone dotfiles with `git clone --bare git@github.com:rasmniel/dotfiles.git ~/.dotfiles`
+alias d='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
 # Edit and source .bashrc using nvim.
 alias rc='nvim ~/.bashrc'
@@ -21,9 +23,6 @@ alias cs='sudo caddy start --config /etc/caddy/Caddyfile'
 alias ce='cf && sudoedit /etc/caddy/Caddyfile'
 
 # Android Studio
-alias gw-lint="./gradlew lint"
-alias gw-build="./gradlew assembleDebug"
-alias gw-install="./gradlew installDebug"
 function adb-launch() {
     # Set reusable app id
     test ! -z "$1" && APP_ID="$1"

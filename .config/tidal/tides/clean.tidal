@@ -1,0 +1,38 @@
+--bd       25
+--cb        1
+--celb     18
+--celp     15
+--ch        1
+--cl        1
+--cp        1
+--cy       25
+--flb      17
+--hc        5
+--ht        5
+--lc        5
+--lt        5
+--ma        1
+--mc        5
+--mt        5
+--oh        5
+--rep       7
+--rs        1
+--sd       25
+--uku      14
+--wtab      3
+
+d6 $ slow 4 $ n "c2 c3 c4 d4" # s "superpiano" # amp 0.5
+
+d1 $ slow 4 $ n "0*4" # s "celb"
+    # transpose "c2" "c2 c3 c4 d4"
+
+d1 $ n "0" # s "celb" # transpose "c2" "c2"
+
+d1 $ n "0" # s "celb" # transpose "c2" "c5"
+
+d1 $ s "cl"
+
+d1 $ slow 16 $ n (run 18) # s "celp"
+
+d1 $ slow 4 $ n (run 3) # s "wtab"
+

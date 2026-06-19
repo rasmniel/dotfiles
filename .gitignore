@@ -23,6 +23,10 @@
 !.config/nvim
 !.config/nvim/**
 
+# Tidal config
+!.config/tidal
+!.config/tidal/**
+
 # Opencode config
 !.config/opencode
 !.config/opencode/**

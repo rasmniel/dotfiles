@@ -4,12 +4,12 @@
 
 -- TidalCycles boot files should be available in the Neovim bootfiles directory.
 -- If the boot files do not exist, allow tidal.nvim to fallback to defaults.
-local bootfiles = vim.fn.stdpath('data') .. '/bootfiles/tidal/'
+local tidal_config = vim.fn.expand('~/.config/tidal/')
 -- Assess the TidalBoot.hs file.
-local boot_tidal_path = vim.fn.expand(bootfiles .. 'BootTidal.hs')
+local boot_tidal_path = vim.fs.joinpath(tidal_config, 'BootTidal.hs')
 local boot_tidal_exists = vim.fn.filereadable(boot_tidal_path)
 -- Assess the startup.scd file.
-local startup_scd_path = vim.fn.expand(bootfiles .. 'startup.scd')
+local startup_scd_path = vim.fs.joinpath(tidal_config, 'startup.scd')
 local startup_scd_exists = vim.fn.filereadable(startup_scd_path)
 
 return {
@@ -20,7 +20,7 @@ return {
             split = 'v',
             tidal = {
                 cmd = 'ghci',
-                args = { '-v0', '-i' .. bootfiles },
+                args = { '-v0', '-i' .. tidal_config },
                 file = boot_tidal_exists and boot_tidal_path or nil,
                 enabled = true,
             },

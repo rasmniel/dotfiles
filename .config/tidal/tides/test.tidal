@@ -1,0 +1,122 @@
+resetCycles
+
+-- Composition: ur
+do
+    let lead = s "superpiano" # gain "0.7"
+    let chords = s "superpiano" # gain "0.7" # legato 2
+    resetCycles;
+    let patterns =
+        [
+            ("a", stack [n "c4 c5 g4 f4 f5 g4 e5 g4" # lead, n "[c3,g4,c4]" # chords]),
+            ("b", stack [n "d4 c5 g4 f4 f5 g4 e5 g4" # lead, n "[d3,a4,d4]" # chords]),
+            ("c", stack [n "f4 c5 g4 f4 f5 g4 e5 g4" # lead, n "[f4,c5,f4]" # chords]),
+            ("d", stack [n "c4 c5 g4 f4 f5 g4 e5 g4" # lead, n "[c3,g4,c4]" # chords])
+        ]
+    d6 $ ur 8 "a b c d" patterns []
+    -- hushAfter 7.9;
+
+do
+    let lead = s "superpiano" # gain "0.7"
+    let chords = s "superpiano" # gain "0.7" # legato 2
+    let pats =
+            [
+                ("a", stack [n "c4 c5 g4 f4 f5 g4 e5 g4" # lead, n "[c3,g4,c4]" # chords ]),
+                ("b", stack [n "d4 c5 g4 f4 f5 g4 e5 g4" # lead, n "[d3,a4,d4]" # chords ]),
+                ("c", stack [n "f4 c5 g4 f4 f5 g4 e5 g4" # lead, n "[f4,c5,f4]" # chords ]),
+                ("d", stack [n "c4 c5 g4 f4 f5 g4 e5 g4" # lead, n "[c3,g4,c4]" # chords ])
+            ]
+        fx =
+            [
+                ("reverb", (# (room 0.8 # sz 0.99 # orbit 1))),
+                ("faster", fast 2)
+            ]
+    d1 $ ur 16 "a b:reverb c:faster d" pats fx
+
+-- qtrigger forces cycles of seqP to 0.
+d1 $ qtrigger $ seqP [ -- seqPLoop [
+  (0, 16, sound "bd bd*2"),
+  (4, 12, sound "hh*2 [sn cp] cp future*4"),
+  (8, 12, sound (samples "arpy*8" (run 16)))
+]
+
+d1 $ s "bd sd bd cp, hh hh hh hh hh hh ho hh"
+
+d2 $ striate 2 $ n "0 0 0 0" # s "bass" # t "c4" "d4 d4 c4 c4"
+    # lpf 600
+
+
+do
+    -- Start the king beat
+    resetCycles;
+    d1 $ s "[bd bd] <less bd bd [less bd]>, cp [cp sd] cp" # amp 1.3
+       # lpf (slow 8 $ range 800 4000 saw)
+       # gain (slow 8 $ range 1 1.2 saw)
+
+do
+    d1 $ s "[sn sn] <stomp sn sn [stomp sn]>, rm [rm lt] rm" # amp 1.3
+       # lpf (slow 8 $ range 1200 2400 saw)
+    d2 $ striate 2 $ n "0 0 0" # s "bass" # t "c4" "d4 d4 c4"
+        # lpf 600
+
+
+
+
+d1 $ slow 2 $ n "0" # s "superfm, superhoover" # amp 0.4
+    # legato 2.5
+    # octave 3
+    # lfo 2
+
+d2 $ slow 2 $ n (scale "minor" "1 <5 5 7 3> <3 3 3 7>") # s "supervibe" # amp 1.5
+    # gain 0.7
+    -- # distort 12
+    # octave 7
+    # lfo 0
+
+
+d2 $ slow 2 $ n "0" # s "superreese" # orbit 2
+    # legato 2
+    # octave 3
+    # lfo 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+d1 $ s "[popkick cp] popkick [less juno] popkick" # amp 0.8
+
+d2 $ fast 1 $ n "<0 [0 0]> 0 0 <0 1 [0 1]>" # s "supergong"
+    # legato 0.5
+    # distort 1
+    # octave 3
+    # cut 1
+    # lpf (slow 8 $ range 100 4000 saw)
+
+d3 $ slow 1 $ n "0 ~ 0 <~ 1 0>" # s "superhoover" # amp 0.6
+    # hpf 100
+    # octave 4
+    # lfo 2
+    # lpf (slow 16 $ range 100 2000 saw)
+
+
+d4 $ slow 8 $ n "0" # s "superfork" # octave 7
+
+
+
+
+

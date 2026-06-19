@@ -1,0 +1,10 @@
+cabal-version: 2.4
+name:          tidal-config
+version:       0.1.0.0
+
+executable tidal-config
+  main-is:        Main.hs
+  build-depends:  base, tidal
+  hs-source-dirs: .
+  other-modules:  Util.Playback
+                  Util.Transpose
