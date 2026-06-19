@@ -4,5 +4,8 @@
 import Util.Playback
 import Util.Transpose
 
+-- Main is necessary for the project to have an entry point.
+-- The function is a no-op because this project isn't executable.
+
 main :: IO ()
 main = return ()
