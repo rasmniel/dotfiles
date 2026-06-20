@@ -61,6 +61,8 @@ function project() {
 }
 alias proj="project"
 
+# Enable setup aliases
+alias setup='source "$HOME/.files/setup/setup.sh"'
 
 # Clipboard using xclip
 function clip() {
