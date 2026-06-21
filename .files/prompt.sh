@@ -54,5 +54,5 @@ function __dollar() {
 }
 
 # The PS1 variable is used to construct the interactive shell prompt.
-PS1='\A$(__cwd)$(__git_branch)$(__git_status)$(__exit_code)$(__name)$(__dollar)'
+PS1='\A$(__cwd)$(__git_branch)$(__git_status)$(__name)$(__exit_code)$(__dollar)'
 
