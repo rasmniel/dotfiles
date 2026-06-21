@@ -1,8 +1,9 @@
 caddy_file() {
   local service="$1"
-  local port="$2"
+  local domain="$2"
+  local port="$3"
 
-  local host="$service.$DOMAIN"
+  local host="$service.$domain"
   local caddy_file="/etc/caddy/hosts.d/$service.caddy"
   local caddy_template="$DEPLOY_ROOT/template.caddy"
 
@@ -15,4 +16,6 @@ caddy_file() {
 
   # Reload caddy to integrate the new file.
   sudo systemctl reload caddy
+
+  output_file "Created reverse proxy file:" "$caddy_file"
 }

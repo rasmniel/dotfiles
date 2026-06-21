@@ -46,7 +46,7 @@ function __exit_code() {
 
 function __name() {
     name="$(uname -n)"
-    printf " @%s" "$(__bold_brown "$name")"
+    printf " %s" "$(__green "$name")"
 }
 
 function __dollar() {

@@ -6,6 +6,6 @@ clone_project() {
   # TODO: Better git url abstraction
   # Try both remotes and use the one the works.
   # Consider prefering one over the other between github and gitlab
-  git clone "git@github.com:lc301092/$service.git"
+  git clone "git@github.com:rasmniel/$service.git"
 }
 

@@ -11,8 +11,7 @@ setup_apt() {
         unzip \
         xclip \
         ripgrep \
-        fd-find \
-        mise
+        fd-find
 }
 
 echo "- setup_apt: Install default apt packages"

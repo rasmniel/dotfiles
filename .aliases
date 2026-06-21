@@ -17,7 +17,7 @@ alias jc='sudo journalctl -u'
 alias jcf='sudo journalctl -o cat -f -u'
 
 # TODO: Temporary pipeline alias
-alias ppl='bash "$HOME/Dev/pi/deploy2/pipeline.sh"'
+alias ppl='bash "$HOME/.files/pipeline/pipeline.sh"'
 
 # Caddy shorthands
 alias cf='sudo caddy fmt --overwrite /etc/caddy/Caddyfile'

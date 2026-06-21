@@ -1,13 +1,11 @@
-#!/usr/bin/env bash
+detect_flavor() {
+  local project="$1"
+  local service_source="$SOURCE_ROOT/$project"
 
-function flavor_step() {
-  local step="$1"
-  local flavor="$2"
-  local service="$3"
+  test ! -d "$service_source" && panic "Service sources do not exist at \"$service_source\""
+  cd "$service_source" || exit 1
 
-  fn="${step}__$flavor"
-  if declare -f "$fn" > /dev/null; then
-    "$fn" "$service"
-  fi
+  test -f package.json && printf "node" && return
+
+  printf "none"
 }
-

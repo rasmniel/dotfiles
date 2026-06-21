@@ -17,6 +17,7 @@ uninstall_service() {
   fi
 
   sudo systemctl daemon-reload
-  # Always return true, even if the service cannot be stopped.
   sudo systemctl stop "$service" 2>/dev/null || true
+
+  output_service "Uninstalled service:" "$service"
 }
