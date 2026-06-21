@@ -44,10 +44,15 @@ function __exit_code() {
     printf " %s" "$(__bold_red "$__last_exit")"
 }
 
+function __name() {
+    name="$(uname -n)"
+    printf " @%s" "$(__bold_brown "$name")"
+}
+
 function __dollar() {
     printf " %s " '$'
 }
 
 # The PS1 variable is used to construct the interactive shell prompt.
-PS1='\A$(__cwd)$(__git_branch)$(__git_status)$(__exit_code)$(__dollar)'
+PS1='\A$(__cwd)$(__git_branch)$(__git_status)$(__exit_code)$(__name)$(__dollar)'
 
