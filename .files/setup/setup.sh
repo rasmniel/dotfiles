@@ -1,6 +1,5 @@
-# Setup home binary path.
-export HOME_BIN="$HOME/bin"
-mkdir -p "$HOME_BIN"
+# Suppress openBinaryFile warning about non-existent file.
+# shellcheck disable=SC1091
 
 # Setup fonts directory.
 export FONTS_DIR="$HOME/.local/share/fonts"
@@ -11,13 +10,34 @@ export DOWNLOAD_DIR="$HOME/Downloads"
 mkdir -p "$DOWNLOAD_DIR"
 
 # Dotfiles should already exist, so don't create it.
-export SETUP="$HOME/.files/setup"
+export PACKAGES="$HOME/.files/setup/packages"
 
 # Source and list setup aliases
-echo "Setup aliases enabled:"
-. "$SETUP/setup_apt.sh"
-. "$SETUP/setup_caddy.sh"
-. "$SETUP/setup_nvim.sh"
-. "$SETUP/setup_mise.sh"
-. "$SETUP/setup_font.sh"
+. "$PACKAGES/setup_apt.sh"
+. "$PACKAGES/setup_caddy.sh"
+. "$PACKAGES/setup_nvim.sh"
+. "$PACKAGES/setup_mise.sh"
+. "$PACKAGES/setup_font.sh"
 
+if [ -z "$1" ]; then
+    echo "Available packages:"
+    echo "- apt: Install default apt packages."
+    echo "- caddy: Install and configure Caddy from official third-party repository."
+    echo "- nvim: Install Neovim 0.11 from official repository."
+    echo "- mise: Install mise with official script @ mise.run and install packages."
+    echo "- node: Install latest nodejs version with mise."
+    echo "- font: Install JetBrainsMono nerd font."
+    return 0
+fi
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        apt) setup_apt ;;
+        caddy) setup_caddy ;;
+        nvim) setup_nvim ;;
+        mise) setup_mise ;;
+        node) setup_node ;;
+        font) setup_font ;;
+    esac
+    shift
+done

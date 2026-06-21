@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Do not warn about dynamically sourced files.
+# Suppress warning about dynamically sourced files.
 # shellcheck disable=SC1090
 
 set -Eeuo pipefail

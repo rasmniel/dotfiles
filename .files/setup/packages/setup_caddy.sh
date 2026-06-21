@@ -32,4 +32,3 @@ setup_caddy() {
     sudo chown caddy:caddy "$hosts_dir" "$log_dir"
 }
 
-echo "- setup_caddy: Install and configure Caddy from official third-party repository."

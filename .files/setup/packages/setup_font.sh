@@ -1,5 +1,3 @@
-# JetBrainsMono nerd font
-
 setup_font() {
     font_name="$FONTS_DIR/JetBrainsMono"
 
@@ -20,4 +18,3 @@ setup_font() {
     fi
 }
 
-echo "- setup_font: Install JetBrainsMono nerd font"

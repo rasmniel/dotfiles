@@ -16,7 +16,8 @@ alias scr='sudo systemctl daemon-reload'
 alias jc='sudo journalctl -u'
 alias jcf='sudo journalctl -o cat -f -u'
 
-# TODO: Temporary pipeline alias
+# System tooling
+alias setup='bash "$HOME/.files/setup/setup.sh"'
 alias ppl='bash "$HOME/.files/pipeline/pipeline.sh"'
 
 # Caddy shorthands
@@ -26,7 +27,7 @@ alias cs='sudo caddy start --config /etc/caddy/Caddyfile'
 alias ce='cf && sudoedit /etc/caddy/Caddyfile'
 
 # Android Studio
-function adb-launch() {
+adb-launch() {
     # Set reusable app id
     test ! -z "$1" && APP_ID="$1"
     test -z "$APP_ID" && printf "No \$APP_ID argument provided\n" && return
@@ -35,7 +36,7 @@ function adb-launch() {
     test -z "$BUILD_FLAVOR" && BUILD_FLAVOR=Debug
     ./gradlew "install$BUILD_FLAVOR" && adb -e shell monkey -p "$APP_ID" -c android.intent.category.LAUNCHER 1
 }
-function emulator-launch() {
+emulator-launch() {
     # Set reusable avd name
     test ! -z "$1" && AVD_NAME="$1"
     test -z "$AVD_NAME" && printf "No \$AVD_NAME argument provided\n" && return
@@ -54,12 +55,12 @@ alias sys='cd /etc/systemd/system'
 alias desktop='cd /usr/share/applications/'
 
 # Kill process listening on the given port.
-function killport() {
+killport() {
     kill -9 "$(lsof -t -i :"$1")"
 }
 
 # Quickly create a project directory.
-function project() {
+project() {
     mkdir "$1" && cd "$1" && git init
 }
 alias proj="project"
@@ -68,7 +69,7 @@ alias proj="project"
 alias setup='source "$HOME/.files/setup/setup.sh"'
 
 # Clipboard using xclip
-function clip() {
+clip() {
     < "$1" xclip -sel clip
 }
 alias clip='clip'

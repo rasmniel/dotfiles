@@ -3,6 +3,7 @@
 # Source all .files indiscriminately
 for file in "$HOME"/.files/*.sh; do
     # shellcheck disable=SC1090
+    test -f "$file" || continue
     . "$file"
 done
 
@@ -26,6 +27,7 @@ HISTCONTROL=ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=2000
 
+# TODO: Considering removing $HOME/bin altogether.
 # PATH exports
 export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/.nvim/bin:$HOME/.opencode/bin"
 

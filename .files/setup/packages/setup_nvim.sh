@@ -5,5 +5,3 @@ setup_nvim() {
     rm nvim-linux-x86_64.tar.gz
 }
 
-echo "- setup_nvim: Install Neovim 0.11 from official repository."
-
