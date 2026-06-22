@@ -1,4 +1,4 @@
-setup_font() {
+setup_nerd_font() {
     font_name="$FONTS_DIR/JetBrainsMono"
 
     # Do not setup font twice.
