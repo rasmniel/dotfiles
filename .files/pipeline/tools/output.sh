@@ -6,7 +6,7 @@ __color() {
 }
 
 output() {
-  [ ! "$SILENT" ] || return 0
+  test "$SILENT" = false || return 0
   printf "\n%s\n" "$*"
 }
 

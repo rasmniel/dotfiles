@@ -8,17 +8,18 @@ install_service() {
   test ! -d "$service_source" && panic "Service sources do not exist at \"$service_source\""
   test -d "$service_dest" && panic "Service already live at \"$service_dest\""
   cd "$service_source" || exit 1
-  git diff --quiet && git diff --cached --quiet || panic "Detected dirty git repository at \"$service_dest\""
-  git pull > "$OUTPUT"
+  test -n "$(git status --porcelain)" && panic "Detected dirty git repository at \"$service_dest\""
 
-  # Flavor specific pre-install
+  git pull --ff-only > "$OUTPUT"
+
+  # Flavor specific pre-install.
   hook pre_install "$flavor" "$service"
 
   # Install source files at service destination.
   sudo rm -rf "$service_dest"
   sudo cp -rf "$service_source" "$service_dest"
 
-  # Flavor specific post-install
+  # Flavor specific post-install.
   hook post_install "$flavor" "$service"
 
   # Ensuring correct service owner and permissions.
@@ -32,3 +33,4 @@ install_service() {
 
   output_file "Installed service:" "$service_dest"
 }
+

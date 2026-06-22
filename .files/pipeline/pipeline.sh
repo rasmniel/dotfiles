@@ -5,7 +5,7 @@
 
 set -Eeuo pipefail
 trap 'printf "\n%s\n -> %s\n" "Internal pipeline failure @ $BASH_SOURCE:$LINENO" "$BASH_COMMAND"' ERR
-trap 'printf "\n%s\n" "Pipeline was interrupted."; exit 1' INT
+trap 'printf "\n%s\n" "Pipeline was interrupted"; exit 130;' INT
 
 # Source pipeline tools.
 DEPLOY_ROOT="$(dirname "$0")"
@@ -19,17 +19,20 @@ for h in "$DEPLOY_ROOT/hooks/"*; do source "$h"; done
 for t in "$DEPLOY_ROOT/tools/"*; do source "$t"; done
 
 # Debugging config.
-export VERBOSE=
-export SILENT=
+export VERBOSE=false
+export SILENT=false
 export OUTPUT=/dev/null
 
+# Safely test that a command is passed at all.
+test -z "${1:-}" && panic_usage
+
 command="$1" # provided pipeline command.
-project= # name of the project in question.
+project="" # name of the project in question.
 domain="$PRIVATE_DOMAIN" # domain for the host.
 flavor=auto # build flavor, defaults to 'auto' for detection.
 port=auto # service port, defaults to 'auto' for port-control.
-public=
-hard= # hard uninstalls also remove service sources.
+public=false # flag for deploying public sites to the internet.
+hard=false # hard uninstalls also remove service sources.
 
 # Ensure command argument.
 case "$command" in
@@ -57,13 +60,13 @@ while [ $# -gt 0 ]; do
       ;;
 
     --verbose|-v)
-      [ "$SILENT" ] && panic_usage
+      test "$SILENT" = true && panic_usage
       VERBOSE=true
       OUTPUT=/dev/stdout
       ;;
 
     --silent|-s)
-      [ "$VERBOSE" ] && panic_usage
+      test "$VERBOSE" = true && panic_usage
       SILENT=true
       OUTPUT=/dev/null
       ;;
@@ -86,13 +89,13 @@ done
 # Ensure runtime variables.
 test -z "$project" && panic_usage
 
-[ "$public" ] && domain="$PUBLIC_DOMAIN"
+test "$public" = true && domain="$PUBLIC_DOMAIN"
 
 # Detect port.
 if [ "$port" = "auto" ]; then
   case "$command" in
     service|proxy|install|publish)
-      if [ "$public" ]; then
+      if [ "$public" = true ]; then
         port=$(next_public_port)
       else
         port=$(next_private_port)
@@ -146,5 +149,8 @@ case "$command" in
   *) panic_usage ;;
 esac
 
-printf "\n"
+# Append a single trailing new-line to the print for a prettier result.
+test "$SILENT" = false && echo
 
+# If the script finishes, exit 0 to ensure no lingering errors.
+exit 0

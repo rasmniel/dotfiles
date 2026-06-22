@@ -24,7 +24,8 @@ colors[brown]=33
 colors[blue]=34
 colors[magenta]=35
 colors[cyan]=36
-colors[white]=37
+colors[gray]=37
+colors[white]=38
 
 alias __normal='__color 0'
 alias __bold='__color 01'
