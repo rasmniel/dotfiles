@@ -4,9 +4,8 @@ enable_service() {
 
   test -f "$service_file" || panic "No service file found at \"$service_file\". Cannot enable service \"$service\"."
 
-  # Start and enable systemd service.
-  sudo systemctl enable "$service"
-  sudo systemctl start "$service"
+  # Enable and start systemd service.
+  sudo systemctl enable --now "$service"
 
   output_service "Enabled service:" "$service"
 }
