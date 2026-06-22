@@ -56,4 +56,4 @@ while [ $# -gt 0 ]; do
 done
 
 echo
-exit 0
+return 0
