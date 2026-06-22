@@ -24,7 +24,7 @@ mkdir -p "$DOWNLOAD_DIR"
 for p in "$HOME/.files/setup/packages/"*; do source "$p"; done
 
 echo_usage() {
-    echo "Usage: setup [apt|caddy|tailscale|nvim|mise|node|font]"
+    echo "Usage: setup package1 package2 package3 ..."
 }
 
 if [ -z "$1" ]; then
@@ -35,9 +35,10 @@ if [ -z "$1" ]; then
     echo "- nvim        Setup Neovim 0.11 from official repository."
     echo "- font        Setup JetBrainsMono nerd font."
     echo "- caddy       Setup and launch Caddy from official third-party repository."
-    echo "- tailscale   Setup and launch the Tailscale server."
     echo "- mise        Setup mise with official script @ mise.run and install packages."
     echo "- node        Setup latest nodejs version with mise."
+    echo "- tailscale   Setup and launch the Tailscale server."
+    echo "- syncthing   Setup and launch the Syncthing server."
     echo
     echo_usage
 fi
@@ -45,12 +46,13 @@ fi
 while [ $# -gt 0 ]; do
     case "$1" in
         apt) setup_apt ;;
-        caddy) setup_caddy ;;
-        tailscale) setup_tailscale ;;
         nvim) setup_nvim ;;
+        font) setup_nerd_font ;;
+        caddy) setup_caddy ;;
         mise) setup_mise ;;
         node) setup_node ;;
-        font) setup_nerd_font ;;
+        tailscale) setup_tailscale ;;
+        syncthing) setup_syncthing ;;
         *) echo "Unsupported package: $1" ;;
     esac
     shift
