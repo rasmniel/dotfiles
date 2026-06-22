@@ -5,23 +5,19 @@
 
 # TODO: Migrate to `projects` directory instead of alternatives.
 # # Setup service directory.
-# export PROJECTS_DIR="$HOME/Projects"
+# export PROJECTS_DIR="$HOME/projects"
 # mkdir -p "$PROJECTS_DIR"
 
 # Setup service directory.
-export SERVICE_DIR="$HOME/Services"
+export SERVICE_DIR="$HOME/services"
 mkdir -p "$SERVICE_DIR"
 
 # Setup fonts directory.
 export FONTS_DIR="$HOME/.local/share/fonts"
 mkdir -p "$FONTS_DIR"
 
-# Setup download directory.
-export DOWNLOAD_DIR="$HOME/Downloads"
-mkdir -p "$DOWNLOAD_DIR"
-
 # Source package aliases.
-for p in "$HOME/.files/setup/packages/"*; do source "$p"; done
+for p in "$HOME/.files/setup/packages/"*; do . "$p"; done
 
 echo_usage() {
     echo "Usage: setup package1 package2 package3 ..."

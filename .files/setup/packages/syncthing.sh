@@ -8,3 +8,4 @@ setup_syncthing() {
 
     sudo systemctl enable --now syncthing@"$USER"
 }
+

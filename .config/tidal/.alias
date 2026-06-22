@@ -1,0 +1,1 @@
+alias ghci-tidal="ghci -ghci-script $HOME/.config/tidal/BootTidal.hs"

@@ -1,39 +1,49 @@
 # vim: set ft=sh
 
+# Abort if running non-interactively
+case $- in *i*) ;;
+    *) return ;;
+esac
+
+# Source aliases
+# TODO: Phase out .aliases in favor of conventional .bash_aliases
+test -f "$HOME/.aliases" && . "$HOME/.aliases"
+# test -f "$HOME/.bash_aliases" && . "$HOME/.bash_aliases"
 # Source all .files indiscriminately
 for file in "$HOME"/.files/*.sh; do
-    # shellcheck disable=SC1090
     test -f "$file" || continue
+    # shellcheck disable=SC1090
     . "$file"
 done
 
-test -f "$HOME/.aliases" && . "$HOME/.aliases"
+# Activate mise, if installed
+command -v mise > /dev/null && eval "$(mise activate bash)"
 
-# Configure bash-specific options with `shopt`
-shopt -s histappend
-shopt -s checkwinsize
+# Disable capslock.
+# setxkbmap -option caps:none
 
-# Load bash completion, if it exists
-if ! shopt -oq posix; then
-    if [ -f /usr/share/bash-completion/bash_completion ]; then
-        . /usr/share/bash-completion/bash_completion
-    elif [ -f /etc/bash_completion ]; then
-        . /etc/bash_completion
-    fi
-fi
-
-# History control
+# Load default dircolors
+eval "$(dircolors -b)"
+# Bash history control
+# See bash(1) for more options
 HISTCONTROL=ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=2000
+shopt -s histappend
+# Configure bash-specific options with `shopt`
+shopt -s checkwinsize
+# Load bash completion
+if ! shopt -oq posix; then
+    test -f /usr/share/bash-completion/bash_completion && . /usr/share/bash-completion/bash_completion
+fi
 
-# TODO: Considering removing $HOME/bin altogether.
 # PATH exports
+# TODO: Remove $HOME/bin altogether.
 export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/.nvim/bin:$HOME/.opencode/bin"
 
 # Set default editors
 export SUDO_EDITOR="$HOME/.nvim/bin/nvim"
 export EDITOR="$HOME/.nvim/bin/nvim"
 
-export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/.opencode/bin"
+test -f "$HOME/bashrc.local" && . "$HOME/bashrc.local"
 

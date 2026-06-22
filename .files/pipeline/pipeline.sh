@@ -13,10 +13,10 @@ if [ ! -f "$DEPLOY_ROOT/.env" ]; then
     echo "Deployment environment missing at \"$DEPLOY_ROOT/.env\""
     exit 1
 fi
-source "$DEPLOY_ROOT/.env"
-for c in "$DEPLOY_ROOT/commands/"*; do source "$c"; done
-for h in "$DEPLOY_ROOT/hooks/"*; do source "$h"; done
-for t in "$DEPLOY_ROOT/tools/"*; do source "$t"; done
+. "$DEPLOY_ROOT/.env"
+for c in "$DEPLOY_ROOT/commands/"*; do . "$c"; done
+for h in "$DEPLOY_ROOT/hooks/"*; do . "$h"; done
+for t in "$DEPLOY_ROOT/tools/"*; do . "$t"; done
 
 # Debugging config.
 export VERBOSE=false
