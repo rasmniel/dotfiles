@@ -28,15 +28,16 @@ echo_usage() {
 }
 
 if [ -z "$1" ]; then
+    echo
     echo "Available packages:"
     echo
-    echo "- apt: Install default apt packages."
-    echo "- caddy:Install and configure Caddy from official third-party repository."
-    echo "- tailscale: Install and start the Tailscale server."
-    echo "- nvim: Install Neovim 0.11 from official repository."
-    echo "- mise: Install mise with official script @ mise.run and install packages."
-    echo "- node: Install latest nodejs version with mise."
-    echo "- font: Install JetBrainsMono nerd font."
+    echo "- apt         Setup default apt packages."
+    echo "- nvim        Setup Neovim 0.11 from official repository."
+    echo "- font        Setup JetBrainsMono nerd font."
+    echo "- caddy       Setup and launch Caddy from official third-party repository."
+    echo "- tailscale   Setup and launch the Tailscale server."
+    echo "- mise        Setup mise with official script @ mise.run and install packages."
+    echo "- node        Setup latest nodejs version with mise."
     echo
     echo_usage
 fi
