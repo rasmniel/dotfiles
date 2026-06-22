@@ -24,15 +24,13 @@ command -v mise > /dev/null && eval "$(mise activate bash)"
 
 # Load default dircolors
 eval "$(dircolors -b)"
-# Bash history control
-# See bash(1) for more options
+
+# History control. See bash(1) for more options
 HISTCONTROL=ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=2000
 shopt -s histappend
-# Configure bash-specific options with `shopt`
 shopt -s checkwinsize
-# Load bash completion
 if ! shopt -oq posix; then
     test -f /usr/share/bash-completion/bash_completion && . /usr/share/bash-completion/bash_completion
 fi
