@@ -1,6 +1,7 @@
 install_service() {
   local service="$1"
-  local flavor="${2:-}"
+  local remote="$2"
+  local flavor="${3:-}"
   local service_source="$SOURCE_ROOT/$service"
   local service_dest="$SERVICE_ROOT/$service"
 
@@ -10,7 +11,11 @@ install_service() {
   cd "$service_source" || exit 1
   test -n "$(git status --porcelain)" && panic "Detected dirty git repository at \"$service_dest\""
 
-  git pull --ff-only > "$OUTPUT"
+  # Setup deploy key to authenticate with remote and pull.
+  deploy_key_file="$(get_deploy_key_file "$service" "$remote")"
+  validate_or_generate_deploy_key "$deploy_key_file"
+  export_git_ssh_command "$deploy_key_file"
+  git pull --ff-only > "$OUTPUT" 2>&1 || true
 
   # Flavor specific pre-install.
   hook pre_install "$flavor" "$service"
@@ -26,9 +31,9 @@ install_service() {
   sudo chmod -R u=rwX,go=rX "$service_dest"
   sudo chown -R root:root "$service_dest"
 
-  # If the project contains a .env file, disable read permissions for group and other.
+  # If the directory contains a .env file, disable read permissions for group and other.
   test -f "$service_dest/.env" && sudo chmod 600 "$service_dest/.env"
-  # If the project contains a .git directory, delete it.
+  # If the directory contains a .git directory, delete it.
   test -f "$service_dest/.git" && rm -rf "$service_dest/.git" || true
 
   output_file "Installed service:" "$service_dest"

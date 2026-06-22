@@ -5,7 +5,7 @@
 
 set -Eeuo pipefail
 trap 'printf "\n%s\n -> %s\n" "Internal pipeline failure @ $BASH_SOURCE:$LINENO" "$BASH_COMMAND"' ERR
-trap 'printf "\n%s\n" "Pipeline was interrupted"; exit 130;' INT
+trap 'printf "\n\n%s\n\n" "Pipeline was interrupted"; exit 130;' INT
 
 # Source pipeline tools.
 DEPLOY_ROOT="$(dirname "$0")"
@@ -27,7 +27,8 @@ export OUTPUT=/dev/null
 test -z "${1:-}" && panic_usage
 
 command="$1" # provided pipeline command.
-project="" # name of the project in question.
+service="" # name of the service in question.
+remote="" # the remote service where the repository lives.
 domain="$PRIVATE_DOMAIN" # domain for the host.
 flavor=auto # build flavor, defaults to 'auto' for detection.
 port=auto # service port, defaults to 'auto' for port-control.
@@ -48,6 +49,8 @@ while [ $# -gt 0 ]; do
     --flavor=*) flavor="${1##*=}" ;;
 
     --port=*) port="${1##*=}" ;;
+
+    --remote=*) remote="${1##*=}" ;;
 
     --public) public=true ;;
 
@@ -74,9 +77,9 @@ while [ $# -gt 0 ]; do
     -*) panic "Unknown argument: $1" ;;
 
     *)
-      # Treat the first arbitrary argument as the project name.
-      if [ -z "$project" ]; then
-        project="$1"
+      # The first arbitrary argument is the service name.
+      if [ -z "$service" ]; then
+        service="$1"
       else
         panic_usage
       fi
@@ -86,64 +89,70 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-# Ensure runtime variables.
-test -z "$project" && panic_usage
+# Ensure service is set.
+test -z "$service" && panic_usage
 
-test "$public" = true && domain="$PUBLIC_DOMAIN"
+# Ensure domain is set for caddy.
+case "$command" in proxy)
+  test "$public" = true && domain="$PUBLIC_DOMAIN"
+esac
+
+# Set correct remote for git operations.
+case "$command" in clone|install|publish)
+  test -z "$remote" && remote="$DEFAULT_GIT_REMOTE"
+esac
 
 # Detect port.
 if [ "$port" = "auto" ]; then
-  case "$command" in
-    service|proxy|install|publish)
-      if [ "$public" = true ]; then
-        port=$(next_public_port)
-      else
-        port=$(next_private_port)
-      fi
-      test -z "$port" && panic "No port detected or provided for project: $project"
-      output_service "Port detected:" "$port"
+  case "$command" in service|proxy|install|publish)
+    if [ "$public" = true ]; then
+      port=$(next_public_port)
+    else
+      port=$(next_private_port)
+    fi
+    test -z "$port" && panic "No port detected or provided for service: $service"
+    output_service "Port detected:" "$port"
   esac
 fi
 
 # Detect flavor.
 if [ "$flavor" = "auto" ]; then
-  case "$command" in
-    service|install|publish)
-      flavor="$(detect_flavor "$project")"
-      test -z "$flavor" && panic "No build flavor detected or provided for project: $project"
-      output_service "Flavor detected:" "$flavor"
+  case "$command" in service|install|publish)
+    flavor="$(detect_flavor "$service")"
+    test -z "$flavor" && panic "No build flavor detected or provided for service: $service"
+    output_service "Flavor detected:" "$flavor"
   esac
 fi
 
 # Execute command.
 case "$command" in
   clone)
-    clone_project "$project"
+    clone_service "$service" "$remote"
     ;;
 
   service)
-    service_file "$project" "$port" "$flavor"
+    service_file "$service" "$port" "$flavor"
     ;;
 
   proxy)
-    caddy_file "$project" "$domain" "$port"
+    caddy_file "$service" "$domain" "$port"
     ;;
 
   install)
-    install_service "$project" "$flavor"
-    service_file "$project" "$port" "$flavor"
-    enable_service "$project"
+    install_service "$service" "$remote" "$flavor"
+    service_file "$service" "$port" "$flavor"
+    enable_service "$service"
     ;;
 
   publish)
-    install_service "$project" "$flavor"
-    service_file "$project" "$port" "$flavor"
-    caddy_file "$project" "$domain" "$port"
-    enable_service "$project"
+    install_service "$service" "$remote" "$flavor"
+    service_file "$service" "$port" "$flavor"
+    caddy_file "$service" "$domain" "$port"
+    enable_service "$service"
     ;;
 
   uninstall)
-    uninstall_service "$project" "$hard"
+    uninstall_service "$service" "$hard"
     ;;
 
   *) panic_usage ;;

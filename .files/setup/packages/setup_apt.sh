@@ -5,6 +5,7 @@ setup_apt() {
         curl \
         wget \
         git \
+        vim \
         unzip \
         xclip \
         ripgrep \
