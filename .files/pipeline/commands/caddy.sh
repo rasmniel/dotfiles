@@ -10,6 +10,7 @@ caddy_file() {
   test -f "$caddy_file" && sudo rm "$caddy_file"
   sudo cp "$caddy_template" "$caddy_file"
   sudo sed -i -e "s|@host|$host|g" "$caddy_file"
+  sudo sed -i -e "s|@service|$service|g" "$caddy_file"
   sudo sed -i -e "s|@port|$port|g" "$caddy_file"
   sudo chmod 644 "$caddy_file"
   sudo chown caddy:caddy "$caddy_file"

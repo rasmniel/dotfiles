@@ -1,6 +1,6 @@
 @host {
     log {
-        output file /var/log/caddy/@host
+        output file /var/log/caddy/@service.access.jsonl
         format json
     }
     reverse_proxy 127.0.0.1:@port

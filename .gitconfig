@@ -22,5 +22,5 @@
     editor = "vi"
 
 [include]
-     path = .gitconfig.user
+     path = .gitconfig.local
 

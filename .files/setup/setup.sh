@@ -3,10 +3,9 @@
 # Suppress warning about dynamically sourced files.
 # shellcheck disable=SC1090
 
-# TODO: Migrate to `projects` directory instead of alternatives.
-# # Setup service directory.
-# export PROJECTS_DIR="$HOME/projects"
-# mkdir -p "$PROJECTS_DIR"
+# Setup service directory.
+export PROJECTS_DIR="$HOME/projects"
+mkdir -p "$PROJECTS_DIR"
 
 # Setup service directory.
 export SERVICE_DIR="$HOME/services"
@@ -55,4 +54,3 @@ while [ $# -gt 0 ]; do
 done
 
 echo
-return 0

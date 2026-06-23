@@ -5,7 +5,7 @@
 !.gitconfig
 
 # Core
-!.rc
+!.bashrc
 !.aliases
 
 # Extras
