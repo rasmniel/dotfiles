@@ -4,9 +4,9 @@
 !.gitignore
 !.gitconfig
 
-# Core
+# Bash
 !.bashrc
-!.aliases
+!.bash_aliases
 
 # Extras
 !.vimrc
@@ -23,7 +23,7 @@
 !.config/nvim
 !.config/nvim/**
 
-# Tidal config
+# TidalCycles config
 !.config/tidal
 !.config/tidal/**
 
