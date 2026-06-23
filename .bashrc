@@ -45,5 +45,5 @@ export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/.nvim/bin:$HOME/.opencode/bi
 export SUDO_EDITOR="$HOME/.nvim/bin/nvim"
 export EDITOR="$HOME/.nvim/bin/nvim"
 
-test -f "$HOME/bashrc.local" && . "$HOME/bashrc.local"
+test -f "$HOME/.bashrc.local" && . "$HOME/.bashrc.local"
 
