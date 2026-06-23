@@ -45,3 +45,5 @@ export EDITOR="$HOME/.nvim/bin/nvim"
 
 test -f "$HOME/.bashrc.local" && . "$HOME/.bashrc.local"
 
+# Stow-away zone below this point.
+
