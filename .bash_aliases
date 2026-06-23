@@ -2,6 +2,7 @@
 
 alias g='git'
 # Clone dotfiles with `git clone --bare git@github.com:rasmniel/dotfiles.git ~/.dotfiles`
+# Then `d checkout` to pull changes when ready.
 alias d='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
 # Edit and source .bashrc using nvim.

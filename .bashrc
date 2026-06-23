@@ -6,18 +6,13 @@ case $- in *i*) ;;
 esac
 
 # Source aliases
-# TODO: Phase out .aliases in favor of conventional .bash_aliases
-test -f "$HOME/.aliases" && . "$HOME/.aliases"
-# test -f "$HOME/.bash_aliases" && . "$HOME/.bash_aliases"
+test -f "$HOME/.bash_aliases" && . "$HOME/.bash_aliases"
 # Source all .files indiscriminately
 for file in "$HOME"/.files/*.sh; do
     test -f "$file" || continue
     # shellcheck disable=SC1090
     . "$file"
 done
-
-# Activate mise, if installed
-command -v mise > /dev/null && eval "$(mise activate bash)"
 
 # Disable capslock.
 # setxkbmap -option caps:none
@@ -44,6 +39,9 @@ export SUDO_EDITOR="$HOME/.nvim/bin/nvim"
 export EDITOR="$HOME/.nvim/bin/nvim"
 
 test -f "$HOME/.bashrc.local" && . "$HOME/.bashrc.local"
+
+# Activate mise, if installed
+command -v mise > /dev/null && eval "$(mise activate bash)"
 
 # Stow-away zone below this point.
 

@@ -7,7 +7,7 @@ __color() {
 
 output() {
     test "$SILENT" = false || return 0
-    printf "\n%s\n" "$*"
+    printf "%s\n" "$*"
 }
 
 output_service() {

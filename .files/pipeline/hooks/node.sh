@@ -1,12 +1,17 @@
+# TODO: Declare rules for node flavor
+#   - Must declare package.main
+#   - Must declare package.scripts.postinstall to build
+
 pre_install__node() {
     test -f package.json || return 1
-    if [ -f package-lock.json ]; then
-        npm ci > "$OUTPUT"
+    local install="install"
+    test -f package-lock.json && install="ci"
+    if loading_enabled; then
+        npm "$install" > "$OUTPUT" 2>&1 &
+        loading "$1"
     else
-        npm install > "$OUTPUT"
+        npm "$install" > "$OUTPUT" 2>&1
     fi
-    # TODO: How to declare given build command?
-    # npm run build
 }
 
 post_install__node() {
@@ -18,6 +23,8 @@ post_install__node() {
 service_exec__node() {
     local service="$1"
     local port="$2"
-    # TODO: `server.js` not necessarily correct. Read from package.json? Maybe use package.main?
-    printf "%s" "/srv/$service/bin/node /srv/$service/server.js --port=$port"
+    local main
+    main="$(jq -r '.main' package.json)"
+    test -n "$main" || panic "Node application $service does not declare package.main"
+    printf "%s" "/srv/$service/bin/node /srv/$service/$main --port=$port"
 }

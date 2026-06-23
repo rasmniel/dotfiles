@@ -4,19 +4,19 @@
 # shellcheck disable=SC1090
 
 set -Eeuo pipefail
-trap 'printf "\n%s\n -> %s\n" "Internal pipeline failure @ $BASH_SOURCE:$LINENO" "$BASH_COMMAND"' ERR
-trap 'printf "\n\n%s\n\n" "Pipeline was interrupted"; exit 130;' INT
 
-# Source pipeline tools.
+# Source pipeline tools and environment.
 DEPLOY_ROOT="$(dirname "$0")"
-if [ ! -f "$DEPLOY_ROOT/.env" ]; then
-    echo "Deployment environment missing at \"$DEPLOY_ROOT/.env\""
-    exit 1
-fi
-. "$DEPLOY_ROOT/.env"
 for c in "$DEPLOY_ROOT/commands/"*; do . "$c"; done
 for h in "$DEPLOY_ROOT/hooks/"*; do . "$h"; done
 for t in "$DEPLOY_ROOT/tools/"*; do . "$t"; done
+test -f "$DEPLOY_ROOT/.env" || panic "Deployment environment missing at \"$DEPLOY_ROOT/.env\""
+. "$DEPLOY_ROOT/.env"
+
+# Traps to clean up and exit gracefully.
+trap 'on_err' ERR
+trap 'on_int' INT
+trap 'on_exit' EXIT
 
 # Debugging config.
 export VERBOSE=false
@@ -46,21 +46,20 @@ shift
 while [ $# -gt 0 ]; do
     case "$1" in
 
+        # Override build flavor.
         --flavor=*) flavor="${1##*=}" ;;
 
+        # Override host port.
         --port=*) port="${1##*=}" ;;
 
+        # Set git remote.
         --remote=*) remote="${1##*=}" ;;
 
+        # For hosting on public domain.
         --public) public=true ;;
 
-        --hard)
-            if [ "$command" = uninstall ]; then
-                hard=true
-            else
-                panic "Only uninstall supports --hard flag."
-            fi
-            ;;
+        # For hard uninstalls.
+        --hard) hard=true ;;
 
         --verbose|-v)
             test "$SILENT" = true && panic_usage
@@ -76,8 +75,8 @@ while [ $# -gt 0 ]; do
 
         -*) panic "Unknown argument: $1" ;;
 
+        # The first arbitrary argument is the service name.
         *)
-            # The first arbitrary argument is the service name.
             if [ -z "$service" ]; then
                 service="$1"
             else
@@ -103,7 +102,7 @@ case "$command" in clone|install|publish)
 esac
 
 # Detect port.
-if [ "$port" = "auto" ]; then
+if [ "$port" = auto ]; then
     case "$command" in service|proxy|install|publish)
         if [ "$public" = true ]; then
             port=$(next_public_port)
@@ -116,7 +115,7 @@ if [ "$port" = "auto" ]; then
 fi
 
 # Detect flavor.
-if [ "$flavor" = "auto" ]; then
+if [ "$flavor" = auto ]; then
     case "$command" in service|install|publish)
         flavor="$(detect_flavor "$service")"
         test -z "$flavor" && panic "No build flavor detected or provided for service: $service"
@@ -157,9 +156,6 @@ case "$command" in
 
     *) panic_usage ;;
 esac
-
-# Append a single trailing new-line to the print for a prettier result.
-test "$SILENT" = false && echo
 
 # If the script finishes, exit 0 to ensure no lingering errors.
 exit 0
