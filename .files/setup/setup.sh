@@ -18,10 +18,6 @@ mkdir -p "$FONTS_DIR"
 # Source package aliases.
 for p in "$HOME/.files/setup/packages/"*; do . "$p"; done
 
-echo_usage() {
-    echo "Usage: setup package1 package2 package3 ..."
-}
-
 if [ -z "$1" ]; then
     echo
     echo "Available packages:"
@@ -31,10 +27,10 @@ if [ -z "$1" ]; then
     echo "- font        Setup JetBrainsMono nerd font."
     echo "- caddy       Setup and launch Caddy from official third-party repository."
     echo "- mise        Setup mise with official script @ mise.run and install packages."
-    echo "- tailscale   Setup and launch the Tailscale server."
+    echo "- tailscale   Setup and launch the Tailscale client."
     echo "- syncthing   Setup and launch the Syncthing server."
     echo
-    echo_usage
+    echo "Usage: setup package1 package2 package3 ..."
 fi
 
 while [ $# -gt 0 ]; do
@@ -52,3 +48,4 @@ while [ $# -gt 0 ]; do
 done
 
 echo
+

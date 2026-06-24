@@ -5,6 +5,11 @@
 
 set -Eeuo pipefail
 
+# Debugging config.
+export VERBOSE=false
+export SILENT=false
+export OUTPUT=/dev/null
+
 # Source pipeline tools and environment.
 DEPLOY_ROOT="$(dirname "$0")"
 for c in "$DEPLOY_ROOT/commands/"*; do . "$c"; done
@@ -17,11 +22,6 @@ test -f "$DEPLOY_ROOT/.env" || panic "Deployment environment missing at \"$DEPLO
 trap 'on_err' ERR
 trap 'on_int' INT
 trap 'on_exit' EXIT
-
-# Debugging config.
-export VERBOSE=false
-export SILENT=false
-export OUTPUT=/dev/null
 
 # Safely test that a command is passed at all.
 test -z "${1:-}" && panic_usage

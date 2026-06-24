@@ -1,3 +1,13 @@
+is_valid_identity() {
+    remote="$1"
+    test -n "$(git config user.name)" || return 1
+    ssh -T "git@$remote" 2>/dev/null
+    # Most git ssh exits with code 255 on authentication error.
+    test $? = 255 && return 1
+    return 0
+}
+
+
 validate_or_generate_deploy_key() {
     local deploy_key_file="$1"
     if [ ! -f "$deploy_key_file" ]; then
@@ -36,4 +46,14 @@ export_git_ssh_command() {
         -o ConnectTimeout=10 \
         -o StrictHostKeyChecking=accept-new \
         -F /dev/null"
+}
+
+ensure_ssh_deploy_key() {
+    local service="$1"
+    local remote="$2"
+    is_valid_identity "$remote" && return 0
+    # Setup deploy key to authenticate with git remote.
+    deploy_key_file="$(get_deploy_key_file "$service" "$remote")"
+    validate_or_generate_deploy_key "$deploy_key_file"
+    export_git_ssh_command "$deploy_key_file"
 }

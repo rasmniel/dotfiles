@@ -9,6 +9,7 @@ setup_apt() {
         vim \
         unzip \
         xclip \
+        jq \
         ripgrep \
         fd-find
 }

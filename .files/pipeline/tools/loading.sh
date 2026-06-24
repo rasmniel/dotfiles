@@ -24,7 +24,7 @@ loading_enabled() {
 }
 
 loading() {
-    test loading_enabled || panic "Unexpected loading error!"
+    test loading_enabled || panic "Unexpected loading usage."
     local label="$1"
     # Store global pid for loading state in order to kill lingering loading states on ctrl-c.
     loading_pid=$!
@@ -55,6 +55,6 @@ loading() {
     done
     printf "\r          \r" >&2
     # Propagate exit code.
-    wait "$loading_pid"
+    wait "$loading_pid" || panic "Background process failed."
 }
 

@@ -11,14 +11,9 @@ install_service() {
     cd "$service_source" || exit 1
     test -n "$(git status --porcelain)" && panic "Detected dirty git repository at \"$service_dest\""
 
-    # Pull naturally if local SSH key is available.
-    if ! git pull --ff-only > "$OUTPUT" 2>&1; then
-        # Setup deploy key to authenticate with remote and pull.
-        deploy_key_file="$(get_deploy_key_file "$service" "$remote")"
-        validate_or_generate_deploy_key "$deploy_key_file"
-        export_git_ssh_command "$deploy_key_file"
-        git pull --ff-only > "$OUTPUT" 2>&1 || panic "Cannot pull git repository for service $service"
-    fi
+    # Pull with git.
+    ensure_ssh_deploy_key "$service" "$remote"
+    git pull --ff-only > "$OUTPUT" 2>&1 || panic "Cannot pull git repository for service $service"
 
     # Flavor specific pre-install.
     hook pre_install "$flavor" "$service"
