@@ -2,11 +2,10 @@ is_valid_identity() {
     remote="$1"
     test -n "$(git config user.name)" || return 1
     ssh -T "git@$remote" > /dev/null 2>&1
-    # Most git ssh exits with code 255 on authentication error.
+    # Typically, git ssh exits with code 255 on authentication error.
     test $? = 255 && return 1
     return 0
 }
-
 
 validate_or_generate_deploy_key() {
     local deploy_key_file="$1"
@@ -57,3 +56,4 @@ ensure_ssh_deploy_key() {
     validate_or_generate_deploy_key "$deploy_key_file"
     export_git_ssh_command "$deploy_key_file"
 }
+
