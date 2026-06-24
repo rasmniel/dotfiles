@@ -4,7 +4,3 @@ setup_mise() {
     mise install
 }
 
-setup_node() {
-    mise use -g node@latest
-}
-

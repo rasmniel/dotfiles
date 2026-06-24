@@ -31,7 +31,6 @@ if [ -z "$1" ]; then
     echo "- font        Setup JetBrainsMono nerd font."
     echo "- caddy       Setup and launch Caddy from official third-party repository."
     echo "- mise        Setup mise with official script @ mise.run and install packages."
-    echo "- node        Setup latest nodejs version with mise."
     echo "- tailscale   Setup and launch the Tailscale server."
     echo "- syncthing   Setup and launch the Syncthing server."
     echo
@@ -45,7 +44,6 @@ while [ $# -gt 0 ]; do
         font) setup_nerd_font ;;
         caddy) setup_caddy ;;
         mise) setup_mise ;;
-        node) setup_node ;;
         tailscale) setup_tailscale ;;
         syncthing) setup_syncthing ;;
         *) echo "Unsupported package: $1" ;;
