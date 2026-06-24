@@ -1,7 +1,7 @@
 is_valid_identity() {
     remote="$1"
     test -n "$(git config user.name)" || return 1
-    ssh -T "git@$remote" 2>/dev/null
+    ssh -T "git@$remote" > /dev/null 2>&1
     # Most git ssh exits with code 255 on authentication error.
     test $? = 255 && return 1
     return 0
