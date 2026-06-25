@@ -10,6 +10,5 @@ setup_apt() {
         unzip \
         xclip \
         jq \
-        ripgrep \
-        fd-find
+        ripgrep
 }
