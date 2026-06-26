@@ -18,6 +18,8 @@ mkdir -p "$FONTS_DIR"
 # Source package aliases.
 for p in "$HOME/.files/setup/packages/"*; do . "$p"; done
 
+trap 'kill "$(jobs -p)"; exit 130;' INT
+
 if [ -z "$1" ]; then
     echo
     echo "Available packages:"
@@ -27,6 +29,7 @@ if [ -z "$1" ]; then
     echo "- font        Setup JetBrainsMono nerd font."
     echo "- caddy       Setup and launch Caddy from official third-party repository."
     echo "- mise        Setup mise with official script @ mise.run and install packages."
+    echo "- ufw         Setup and enable uncomplicated firewall with strict webhost rules."
     echo "- tailscale   Setup and launch the Tailscale client."
     echo "- syncthing   Setup and launch the Syncthing server."
     echo
@@ -40,6 +43,7 @@ while [ $# -gt 0 ]; do
         font) setup_nerd_font ;;
         caddy) setup_caddy ;;
         mise) setup_mise ;;
+        ufw) setup_ufw ;;
         tailscale) setup_tailscale ;;
         syncthing) setup_syncthing ;;
         *) echo "Unsupported package: $1" ;;
