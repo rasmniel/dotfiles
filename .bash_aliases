@@ -18,6 +18,7 @@ alias jcf='sudo journalctl -o cat -f -u'
 # System tooling
 alias setup='bash "$HOME/.files/setup/setup.sh"'
 alias ppl='bash "$HOME/.files/pipeline/pipeline.sh"'
+alias pm='bash "$HOME/.files/projects/manager.sh"'
 
 # cd shorthands
 alias srv='cd /srv && la'

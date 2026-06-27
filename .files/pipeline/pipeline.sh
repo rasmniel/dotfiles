@@ -38,7 +38,7 @@ hard=false # hard uninstalls also remove service sources.
 # Ensure command argument.
 case "$command" in
     clone|service|proxy|install|publish|uninstall) ;;
-    *) panic_usage "$@" ;;
+    *) panic_usage ;;
 esac
 shift
 
@@ -58,7 +58,7 @@ while [ $# -gt 0 ]; do
         # For hosting on public domain.
         --public) public=true ;;
 
-        # For hard uninstalls.
+        # Required for hard uninstalls.
         --hard) hard=true ;;
 
         --verbose|-v)
@@ -76,13 +76,7 @@ while [ $# -gt 0 ]; do
         -*) panic "Unknown argument: $1" ;;
 
         # The first arbitrary argument is the service name.
-        *)
-            if [ -z "$service" ]; then
-                service="$1"
-            else
-                panic_usage
-            fi
-            ;;
+        *) test -n "$service" && panic_usage || service="$1" ;;
 
     esac
     shift
@@ -153,9 +147,5 @@ case "$command" in
     uninstall)
         uninstall_service "$service" "$hard"
         ;;
-
-    *) panic_usage ;;
 esac
 
-# If the script finishes, exit 0 to ensure no lingering errors.
-exit 0
