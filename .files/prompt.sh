@@ -1,5 +1,3 @@
-# vim: set ft=sh
-
 #
 ## Setup prompt command
 

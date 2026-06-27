@@ -1,5 +1,3 @@
-# vim: set ft=sh
-
 # Terminal codes are documented here `man 4 console_codes`.
 # The following terminal codes are used to create the color line.
 #

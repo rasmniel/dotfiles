@@ -1,5 +1,3 @@
-# vim: set ft=sh
-
 # Abort if running non-interactively
 case $- in *i*) ;;
     *) return ;;

@@ -1,12 +1,12 @@
 *
 
-# Git
-!.gitignore
-!.gitconfig
-
 # Bash
 !.bashrc
 !.bash_aliases
+
+# Git
+!.gitignore
+!.gitconfig
 
 # Extras
 !.vimrc

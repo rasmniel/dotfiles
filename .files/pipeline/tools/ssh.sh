@@ -7,18 +7,6 @@ is_valid_identity() {
     return 0
 }
 
-validate_or_generate_deploy_key() {
-    local deploy_key_file="$1"
-    if [ ! -f "$deploy_key_file" ]; then
-        ssh-keygen -t ed25519 -f "$deploy_key_file" -N "" > /dev/null
-        output_file "Generated SSH deploy key file:" "$deploy_key_file"
-        echo
-        cat "$deploy_key_file.pub"
-        echo
-        read -r -p "Press Enter when this key has been setup as deploy key." _
-    fi
-}
-
 get_deploy_key_file() {
     local service="$1"
     local remote="$2"
@@ -34,10 +22,22 @@ get_deploy_key_file() {
     printf "%s" "$deploy_key_file"
 }
 
+validate_or_generate_deploy_key() {
+    local deploy_key_file="$1"
+    if [ ! -f "$deploy_key_file" ]; then
+        ssh-keygen -t ed25519 -f "$deploy_key_file" -N "" > /dev/null
+        output_file "Generated SSH deploy key file:" "$deploy_key_file"
+        echo
+        cat "$deploy_key_file.pub"
+        echo
+        read -r -p "Press Enter when this key has been setup as deploy key." _
+    fi
+}
+
 export_git_ssh_command() {
     local deploy_key_file="$1"
     export GIT_SSH_COMMAND="ssh \
-        -i $deploy_key_file \
+        -i \"$deploy_key_file\" \
         -o IdentitiesOnly=yes \
         -o IdentityAgent=none \
         -o ForwardAgent=no \

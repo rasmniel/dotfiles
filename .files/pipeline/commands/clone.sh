@@ -12,13 +12,6 @@ clone_service() {
     cd "$SOURCE_ROOT" || panic "No source root."
     test -d "./$service" && panic "Service \"$service\" already exists."
 
-    # # Attempt to clone with local SSH key before creating a deploy key.
-    # if git clone "$repo" > "$OUTPUT" 2>&1; then
-    #     identity="$(git config user.name)"
-    #     output_service "Cloned $remote repository by local identity $identity:" "$service"
-    #     return 0
-    # fi
-
     ensure_ssh_deploy_key "$service" "$remote"
     git clone "$repo" > "$OUTPUT" 2>&1 || panic "Cannot clone repository \"$repo\""
 
