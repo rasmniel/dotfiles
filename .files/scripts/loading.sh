@@ -1,5 +1,7 @@
 # Global process ID for storing the process that is currently loading.
-declare loading_pid=""
+LOADING_PID=""
+# Kill the loading process ID, if this process exits unexpectedly.
+trap 'test -n "$LOADING_PID" && kill "$LOADING_PID" 2>/dev/null' EXIT INT TERM
 
 declare symbols=('$' '#' '*' '@' '&')
 
@@ -20,20 +22,20 @@ __frame() {
 }
 
 loading_enabled() {
-    [ "$SILENT" = false ] && [ "$VERBOSE" = false ]
+    test "${SILENT:-}" != true && test "${VERBOSE:-}" != true
 }
 
 loading() {
-    test loading_enabled || panic "Unexpected loading usage."
-    local label="$1"
+    loading_enabled || panic "Unexpected loading usage."
     # Store global pid for loading state in order to kill lingering loading states on ctrl-c.
-    loading_pid=$!
+    LOADING_PID=$!
+    local label="$1"
     # Lead with a new-line.
     local i=0
     local n="${#label}"
     local c
     test -z "$label" && c=$(__random_symbol)
-    while kill -0 "$loading_pid" 2>/dev/null; do
+    while kill -0 "$LOADING_PID" 2>/dev/null; do
         test -n "$label" && c="${label:i:1}"
         __frame 0 "$c"
         __frame 1 "$c"
@@ -55,6 +57,6 @@ loading() {
     done
     printf "\r          \r" >&2
     # Propagate exit code.
-    wait "$loading_pid" || panic "Background process failed."
+    wait "$LOADING_PID" || panic "Background process failed."
 }
 

@@ -2,6 +2,12 @@
 
 # Suppress warning about dynamically sourced files.
 # shellcheck disable=SC1090
+# shellcheck disable=SC1091
+
+trap 'kill "$(jobs -p)"; exit 130;' INT
+
+# Source environment.
+. "$SCRIPT_ROOT/source.sh"
 
 # Setup service directory.
 export PROJECTS_DIR="$HOME/projects"
@@ -16,25 +22,28 @@ export FONTS_DIR="$HOME/.local/share/fonts"
 mkdir -p "$FONTS_DIR"
 
 # Source package aliases.
-for p in "$HOME/.files/setup/packages/"*; do . "$p"; done
-
-trap 'kill "$(jobs -p)"; exit 130;' INT
+SETUP_ROOT="$(dirname "$0")"
+for p in "$SETUP_ROOT/packages/"*; do . "$p"; done
+. "$SETUP_ROOT/state.sh"
 
 if [ -z "$1" ]; then
     echo
     echo "Available packages:"
     echo
-    echo "- apt         Setup default apt packages."
-    echo "- nvim        Setup Neovim 0.11 from official repository."
-    echo "- font        Setup JetBrainsMono nerd font."
-    echo "- caddy       Setup and launch Caddy from official third-party repository."
-    echo "- mise        Setup mise with official script @ mise.run and install packages."
-    echo "- ufw         Setup and enable uncomplicated firewall with strict webhost rules."
-    echo "- tailscale   Setup and launch the Tailscale client."
-    echo "- syncthing   Setup and launch the Syncthing server."
+    print_li "apt" "Setup default apt packages." "$(state_color "apt")" "$(state_bullet "apt")"
+    print_li "nvim" "Setup Neovim 0.11 from official repository." "$(state_color "nvim")" "$(state_bullet "nvim")"
+    print_li "font" "Setup JetBrainsMono nerd font." "$(state_color "font")" "$(state_bullet "font")"
+    print_li "caddy" "Setup and launch Caddy from official third-party repository." "$(state_color "caddy")" "$(state_bullet "caddy")"
+    print_li "mise" "Setup mise with official script @ mise.run and install packages." "$(state_color "mise")" "$(state_bullet "mise")"
+    print_li "ufw" "Setup and enable uncomplicated firewall with strict webhost rules." "$(state_color "ufw")" "$(state_bullet "ufw")"
+    print_li "tailscale" "Setup and launch the Tailscale client." "$(state_color "tailscale")" "$(state_bullet "tailscale")"
+    print_li "syncthing" "Setup and launch the Syncthing server." "$(state_color "syncthing")" "$(state_bullet "syncthing")"
     echo
     echo "Usage: setup package1 package2 package3 ..."
 fi
+
+# TODO: remove installed packages
+# test "$2" = "--rm" || test "$2" = "-rm" && echo "Remove $2"
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -46,7 +55,7 @@ while [ $# -gt 0 ]; do
         ufw) setup_ufw ;;
         tailscale) setup_tailscale ;;
         syncthing) setup_syncthing ;;
-        *) echo "Unsupported package: $1" ;;
+        *) panic "Unsupported package: $1" ;;
     esac
     shift
 done

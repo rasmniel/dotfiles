@@ -9,7 +9,7 @@ on_err() {
 on_int() {
     # Avoid ERR trap printing lingering errors.
     trap - ERR
-    printf "%s\n" "$(output_failure "INT" "Pipeline was interrupted")"
+    printf "%s\n" "$(print_failure "INT" "Pipeline was interrupted")"
     kill "$loading_pid" 2>/dev/null || true
     exit 130
 }

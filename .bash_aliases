@@ -15,10 +15,11 @@ alias scr='sudo systemctl daemon-reload'
 alias jc='sudo journalctl -u'
 alias jcf='sudo journalctl -o cat -f -u'
 
-# System tooling
-alias setup='bash "$HOME/.files/setup/setup.sh"'
-alias ppl='bash "$HOME/.files/pipeline/pipeline.sh"'
-alias pm='bash "$HOME/.files/projects/manager.sh"'
+# Script tooling
+alias run_script='export SCRIPT_ROOT="$HOME/.files/scripts"; bash '
+alias setup='run_script "$HOME/.files/setup/setup.sh"'
+alias ppl='run_script "$HOME/.files/pipeline/pipeline.sh"'
+alias pm='run_script "$HOME/.files/projects/manager.sh"'
 
 # cd shorthands
 alias srv='cd /srv && la'

@@ -26,7 +26,7 @@ validate_or_generate_deploy_key() {
     local deploy_key_file="$1"
     if [ ! -f "$deploy_key_file" ]; then
         ssh-keygen -t ed25519 -f "$deploy_key_file" -N "" > /dev/null
-        output_file "Generated SSH deploy key file:" "$deploy_key_file"
+        print_file "Generated SSH deploy key file:" "$deploy_key_file"
         echo
         cat "$deploy_key_file.pub"
         echo

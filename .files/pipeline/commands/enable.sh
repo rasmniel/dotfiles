@@ -1,11 +1,10 @@
 enable_service() {
-    local service="$1"
-    local service_file="/etc/systemd/system/$service.service"
+    local service_file="/etc/systemd/system/$SERVICE.service"
 
-    test -f "$service_file" || panic "No service file found at \"$service_file\". Cannot enable service \"$service\"."
+    test -f "$service_file" || panic "No service file found at \"$service_file\". Cannot enable service \"$SERVICE\"."
 
     # Enable and start systemd service.
-    sudo systemctl enable --now "$service"
+    sudo systemctl enable --now "$SERVICE"
 
-    output_service "Enabled service:" "$service"
+    print_service "Enabled service:" "$SERVICE"
 }

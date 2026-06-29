@@ -1,9 +1,6 @@
 install_service() {
-    local service="$1"
-    local remote="$2"
-    local flavor="${3:-}"
-    local service_source="$SOURCE_ROOT/$service"
-    local service_dest="$SERVICE_ROOT/$service"
+    local service_source="$SERVICE_ROOT/$SERVICE"
+    local service_dest="$SERVER_ROOT/$SERVICE"
 
     # Update local sources.
     test -d "$service_source" || panic "Service sources do not exist at \"$service_source\""
@@ -12,18 +9,18 @@ install_service() {
     test -n "$(git status --porcelain)" && panic "Detected dirty git repository at \"$service_dest\""
 
     # Pull with git.
-    ensure_ssh_deploy_key "$service" "$remote"
-    git pull --ff-only > "$OUTPUT" 2>&1 || panic "Cannot pull git repository for service $service"
+    ensure_ssh_deploy_key "$SERVICE" "$REMOTE"
+    git pull --ff-only > "$OUTPUT" 2>&1 || panic "Cannot pull git repository for service $SERVICE"
 
     # Flavor specific pre-install.
-    hook pre_install "$flavor" "$service"
+    hook pre_install "$FLAVOR" "$SERVICE"
 
     # Install source files at service destination.
     sudo rm -rf "$service_dest"
     sudo cp -rf "$service_source" "$service_dest"
 
     # Flavor specific post-install.
-    hook post_install "$flavor" "$service"
+    hook post_install "$FLAVOR" "$SERVICE"
 
     # Ensuring correct service owner and permissions.
     sudo chmod -R u=rwX,go=rX "$service_dest"
@@ -38,6 +35,6 @@ install_service() {
         rm -rf "$service_dest/.git"
     fi
 
-    output_file "Installed service:" "$service_dest"
+    print_file "Installed service:" "$service_dest"
 }
 

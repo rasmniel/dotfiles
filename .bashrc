@@ -5,8 +5,8 @@ esac
 
 # Source aliases
 test -f "$HOME/.bash_aliases" && . "$HOME/.bash_aliases"
-# Source all .files indiscriminately
-for file in "$HOME"/.files/*.sh; do
+# Source all terminal .files indiscriminately
+for file in "$HOME"/.files/terminal/*.sh; do
     test -f "$file" || continue
     # shellcheck disable=SC1090
     . "$file"

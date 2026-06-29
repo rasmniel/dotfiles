@@ -1,7 +1,7 @@
 git_uri() {
     local actual_remote="$REMOTE"
     test -n "${1:-}" && actual_remote="$1"
-    printf "git@%s:%s/%s" "$actual_remote" "$USER" "$PROJECT"
+    printf "git@%s:%s/%s" "$actual_remote" "$NAMESPACE" "$PROJECT"
 }
 
 clone_project() {

@@ -15,7 +15,7 @@ pre_install__node() {
 }
 
 post_install__node() {
-    local service_dest="$SERVICE_ROOT/$1"
+    local service_dest="$SERVER_ROOT/$1"
     sudo mkdir -p "$service_dest/bin"
     sudo cp "$(which node)" "$service_dest/bin/node"
 }

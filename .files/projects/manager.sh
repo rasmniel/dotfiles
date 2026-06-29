@@ -2,22 +2,15 @@
 
 set -Eeuo pipefail
 
-panic() {
-    printf "%s\n" "$*"
-    exit 1
-}
-
-DIRNAME="$(dirname "$0")"
-test -f "$DIRNAME/.env" || panic "Project management environment missing at \"$DIRNAME/.env\""
-. "$DIRNAME/.env"
-. "$DIRNAME/git.sh"
+. "$SCRIPT_ROOT/source.sh"
+. "$(dirname "$0")/git.sh"
 
 test -z "${1:-}" && panic "No command provided."
 
 COMMAND="$1" # command to run.
 PROJECT="" # project to manage.
 REMOTE="$DEFAULT_GIT_REMOTE" # git remote to clone from.
-USER="$DEFAULT_GIT_USER" # git user to clone with.
+NAMESPACE="$DEFAULT_GIT_NAMESPACE" # git user to clone with.
 from="" # remote to migrate from.
 really=false # required for uninstalls.
 
@@ -31,7 +24,7 @@ shift
 while [ $# -gt 0 ]; do
     case "$1" in
         --remote=*) REMOTE="${1##*=}" ;;
-        --user=*) USER="${1##*=}" ;;
+        --user=*) NAMESPACE="${1##*=}" ;;
         --from=*) from="${1##*=}" ;;
         --really) really=true ;;
         -*) panic "Unknown argument: $1" ;;
@@ -42,7 +35,7 @@ done
 
 test -z "$PROJECT" && panic "No project provided."
 
-PROJECT_DIR="$PROJECTS_ROOT/$PROJECT"
+PROJECT_DIR="$PROJECT_ROOT/$PROJECT"
 
 # Execute command.
 case "$COMMAND" in
@@ -54,8 +47,8 @@ case "$COMMAND" in
         ;;
 
     remove)
+        # TODO: Ensure not deleting projects with unpushed commits!
         test "$really" = true || panic "Run with --really to really remove the project."
         rm -rf "$PROJECT_DIR" ;;
 esac
-
 

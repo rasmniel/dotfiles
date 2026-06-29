@@ -1,6 +1,6 @@
 __next_port() {
     local type="$1"
-    local ports="$DEPLOY_ROOT/.ports"
+    local ports="$PIPELINE_ROOT/.ports"
     test -f "$ports" || panic "The .ports file is missing. Cannot derive next port."
 
     local port_type
