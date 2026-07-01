@@ -42,8 +42,7 @@ if [ -z "$1" ]; then
     echo "Usage: setup package1 package2 package3 ..."
 fi
 
-# TODO: remove installed packages
-# test "$2" = "--rm" || test "$2" = "-rm" && echo "Remove $2"
+# TODO: Support removal of installed packages
 
 while [ $# -gt 0 ]; do
     case "$1" in
