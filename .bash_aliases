@@ -20,6 +20,7 @@ alias run_script='export SCRIPT_ROOT="$HOME/.files/scripts"; bash '
 alias setup='run_script "$HOME/.files/setup/setup.sh"'
 alias ppl='run_script "$HOME/.files/pipeline/pipeline.sh"'
 alias pm='run_script "$HOME/.files/projects/manager.sh"'
+alias log='run_script "$HOME/.files/log/log.sh"'
 
 # cd shorthands
 alias srv='cd /srv && la'
