@@ -34,7 +34,6 @@
             "npm *": "deny",
             "npm i": "allow",
             "npm install": "allow",
-            "npm start": "allow",
             "npm test": "allow",
             "npm ci *": "allow",
             "npm i *": "ask",

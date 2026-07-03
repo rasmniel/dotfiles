@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@opencode-ai/plugin": "1.4.7",
+    "@types/node": "^25.9.2"
+  }
+}

@@ -1,0 +1,12 @@
+[Unit]
+Description=@service
+
+[Service]
+User=@user
+ExecStart=@exec
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=default.target

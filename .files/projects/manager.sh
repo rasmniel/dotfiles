@@ -23,9 +23,9 @@ shift
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        --remote=*) REMOTE="${1##*=}" ;;
-        --user=*) NAMESPACE="${1##*=}" ;;
-        --from=*) from="${1##*=}" ;;
+        --remote=*) REMOTE="${1#*=}" ;;
+        --user=*) NAMESPACE="${1#*=}" ;;
+        --from=*) from="${1#*=}" ;;
         --really) really=true ;;
         -*) panic "Unknown argument: $1" ;;
         *) test -n "$PROJECT" && panic "Unknown argument: $1" || PROJECT="$1" ;;

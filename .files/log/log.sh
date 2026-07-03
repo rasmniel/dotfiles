@@ -60,8 +60,8 @@ while [ $# -gt 0 ]; do
         +slow|slow) append_select '.duration >= 1';;
         -slow) append_select '.duration < 1';;
 
-        +ip=*|ip=*) append_select "$(printf '.request.remote_ip == "%s"' "${1##*=}")" ;;
-        -ip=*) append_select "$(printf '.request.remote_ip != "%s"' "${1##*=}")" ;;
+        +ip=*|ip=*) append_select "$(printf '.request.remote_ip == "%s"' "${1#*=}")" ;;
+        -ip=*) append_select "$(printf '.request.remote_ip != "%s"' "${1#*=}")" ;;
 
         -known|known|+known)
             test "${1:0:1}" = "-" && not="not" || not=

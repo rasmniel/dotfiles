@@ -2,17 +2,17 @@ uninstall_service() {
     local hard="${1:-}"
 
     local service_file="/etc/systemd/system/$SERVICE.service"
-    test -f "$service_file" && sudo rm "$service_file"
+    if [ -f "$service_file" ]; then
+        sudo systemctl stop "$SERVICE" 2>/dev/null || true
+        sudo rm "$service_file"
+        sudo systemctl daemon-reload
+    fi
 
     local caddy_file="/etc/caddy/hosts.d/$SERVICE.caddy"
     test -f "$caddy_file" && sudo rm "$caddy_file" && sudo systemctl reload caddy
 
     local service_dest="/srv/$SERVICE"
-    if [ -d "$service_dest" ]; then
-        sudo rm -fr "$service_dest"
-        sudo systemctl daemon-reload
-        sudo systemctl stop "$SERVICE" 2>/dev/null || true
-    fi
+    test -d "$service_dest" && sudo rm -fr "$service_dest"
 
     if [ "$hard" = true ]; then
         local service_source="$SERVICE_ROOT/$SERVICE"

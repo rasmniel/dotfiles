@@ -37,6 +37,7 @@ test -z "${1:-}" && panic_usage
 
 command="$1" # provided pipeline command.
 SERVICE="" # name of the service in question.
+EXEC_START="" # override service ExecStart.
 REMOTE="$DEFAULT_GIT_REMOTE" # the remote service where the repository lives.
 NAMESPACE="$DEFAULT_GIT_NAMESPACE" # the git namespace to use for git operations.
 DOMAIN="$PRIVATE_DOMAIN" # domain for the host.
@@ -45,9 +46,11 @@ PORT=auto # service port, defaults to 'auto' for port-control.
 public=false # flag for deploying public sites to the internet.
 hard=false # hard uninstalls also remove service sources.
 
+# TODO: Consider adding more top level derivatives such as $SERVICE_FILE and $CADDY_FILE
+
 # Ensure command argument.
 case "$command" in
-    clone|service|proxy|install|publish|uninstall) ;;
+    clone|service|proxy|local|install|publish|uninstall) ;;
     *) panic_usage ;;
 esac
 shift
@@ -55,9 +58,10 @@ shift
 # Parse remaining arguments.
 while [ $# -gt 0 ]; do
     case "$1" in
-        --flavor=*) FLAVOR="${1##*=}" ;;
-        --port=*) PORT="${1##*=}" ;;
-        --remote=*) REMOTE="${1##*=}" ;;
+        --flavor=*) FLAVOR="${1#*=}" ;;
+        --port=*) PORT="${1#*=}" ;;
+        --remote=*) REMOTE="${1#*=}" ;;
+        --exec=*) EXEC_START="${1#*=}" ;;
 
         --public)
             public=true
@@ -118,6 +122,12 @@ case "$command" in
     service) service_file ;;
 
     proxy) caddy_file ;;
+
+    local)
+        local_service_file
+        local_caddy_file
+        enable_service
+        ;;
 
     install)
         install_service

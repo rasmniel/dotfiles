@@ -41,5 +41,6 @@ test -f "$HOME/.bashrc.local" && . "$HOME/.bashrc.local"
 # Activate mise, if installed
 command -v mise > /dev/null && eval "$(mise activate bash)"
 
+
 # Stow-away zone below this point.
 
