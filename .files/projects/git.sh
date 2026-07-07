@@ -6,7 +6,7 @@ git_uri() {
 
 git_ensure_clean() {
     test -n "$(git status --porcelain)" && panic "Project $PROJECT has uncommitted changes."
-    test "$(git rev-list --count "@{u}..HEAD")" -gt 0 && panic "Project $PROJECT has unpushed commits."
+    test "$(git rev-list --count "@{u}..HEAD" 2>/dev/null)" -gt 0 && panic "Project $PROJECT has unpushed commits."
     return 0
 }
 

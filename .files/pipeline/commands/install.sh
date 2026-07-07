@@ -10,7 +10,7 @@ install_service() {
 
     # Pull with git.
     ensure_ssh_deploy_key "$SERVICE" "$REMOTE"
-    git pull --ff-only > "$OUTPUT" 2>&1 || panic "Cannot pull git repository for service $SERVICE"
+    git pull --ff-only || panic "Cannot pull git repository for service $SERVICE"
 
     # Flavor specific pre-install.
     hook pre_install "$FLAVOR" "$SERVICE"

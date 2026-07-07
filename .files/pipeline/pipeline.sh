@@ -9,16 +9,11 @@
 
 set -Eeuo pipefail
 
-# Debugging config.
-VERBOSE=false
-SILENT=false
-OUTPUT=/dev/null
-
 # Source environment.
 . "$SCRIPT_ROOT/source.sh"
 
 panic_usage() {
-    panic "Usage: ppl <clone|service|proxy|install|publish|uninstall> [--public|--remote|--hard|<--verbose|--silent>] <service>"
+    panic "Usage: ppl <clone|service|expose|local|install|publish|uninstall|status> [--remote|--hard] <service>"
 }
 
 # Source pipeline tools.
@@ -32,28 +27,22 @@ trap 'on_err' ERR
 trap 'on_int' INT
 trap 'on_exit' EXIT
 
-# Safely test that a command is passed at all.
-test -z "${1:-}" && panic_usage
-
-command="$1" # provided pipeline command.
-SERVICE="" # name of the service in question.
-EXEC_START="" # override service ExecStart.
-REMOTE="$DEFAULT_GIT_REMOTE" # the remote service where the repository lives.
-NAMESPACE="$DEFAULT_GIT_NAMESPACE" # the git namespace to use for git operations.
-DOMAIN="$PRIVATE_DOMAIN" # domain for the host.
-FLAVOR=auto # build flavor, defaults to 'auto' for detection.
-PORT=auto # service port, defaults to 'auto' for port-control.
-public=false # flag for deploying public sites to the internet.
-hard=false # hard uninstalls also remove service sources.
-
-# TODO: Consider adding more top level derivatives such as $SERVICE_FILE and $CADDY_FILE
-
-# Ensure command argument.
-case "$command" in
-    clone|service|proxy|local|install|publish|uninstall) ;;
+command="$1"
+# Safely test that a supported command is passed.
+case "${1:-}" in
+    clone|service|expose|local|install|publish|uninstall|status) command="$1" ;;
     *) panic_usage ;;
 esac
 shift
+
+SERVICE="" # name of the service in question.
+REMOTE="$DEFAULT_GIT_REMOTE" # the remote service where the repository lives.
+NAMESPACE="$DEFAULT_GIT_NAME" # the git namespace to use for git operations.
+EXEC_START="" # override service ExecStart.
+PUBLIC_DOMAIN="" # set to deploy public site to the internet.
+FLAVOR=auto # build flavor, defaults to 'auto' for detection.
+PORT=auto # service port, defaults to 'auto' for port-control.
+hard=false # hard uninstalls also remove service sources.
 
 # Parse remaining arguments.
 while [ $# -gt 0 ]; do
@@ -61,29 +50,11 @@ while [ $# -gt 0 ]; do
         --flavor=*) FLAVOR="${1#*=}" ;;
         --port=*) PORT="${1#*=}" ;;
         --remote=*) REMOTE="${1#*=}" ;;
+        --namespace=*) NAMESPACE="${1#*=}" ;;
         --exec=*) EXEC_START="${1#*=}" ;;
-
-        --public)
-            public=true
-            DOMAIN="$PUBLIC_DOMAIN"
-            ;;
-
+        --public-domain=*) PUBLIC_DOMAIN="${1#*=}" ;;
         --hard) hard=true ;;
-
-        --verbose|-v)
-            test "$SILENT" = true && panic_usage
-            VERBOSE=true
-            OUTPUT=/dev/stdout
-            ;;
-
-        --silent|-s)
-            test "$VERBOSE" = true && panic_usage
-            SILENT=true
-            OUTPUT=/dev/null
-            ;;
-
         -*) panic "Unknown argument: $1" ;;
-
         # The first arbitrary argument is the service name.
         *) test -n "$SERVICE" && panic_usage || SERVICE="$1" ;;
     esac
@@ -95,8 +66,8 @@ test -z "$SERVICE" && panic_usage
 
 # Detect port.
 if [ "$PORT" = auto ]; then
-    case "$command" in service|proxy|install|publish)
-        if [ "$public" = true ]; then
+    case "$command" in service|expose|install|publish)
+        if [ -n "$PUBLIC_DOMAIN" ]; then
             PORT=$(next_public_port)
         else
             PORT=$(next_private_port)
@@ -109,7 +80,7 @@ fi
 # Detect flavor.
 if [ "$FLAVOR" = auto ]; then
     case "$command" in service|install|publish)
-        FLAVOR="$(detect_flavor "$SERVICE")"
+        FLAVOR="$(detect_flavor)"
         test -z "$FLAVOR" && panic "No build flavor detected or provided for service: $SERVICE"
         print_service "Flavor detected:" "$FLAVOR"
     esac
@@ -119,13 +90,16 @@ fi
 case "$command" in
     clone) clone_service ;;
 
-    service) service_file ;;
+    service)
+        service_file
+        enable_service
+        ;;
 
-    proxy) caddy_file ;;
+    expose) caddy_file ;;
 
     local)
-        local_service_file
-        local_caddy_file
+        service_file
+        caddy_file
         enable_service
         ;;
 
@@ -144,6 +118,8 @@ case "$command" in
 
     uninstall) uninstall_service "$hard" ;;
 
-    # TODO: state output checking if caddy file exists, service file exists, etc. and outputs a colored list of data.
+    status) ;; # Status will always print.
+
 esac
 
+service_status

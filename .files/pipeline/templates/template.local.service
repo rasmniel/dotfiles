@@ -6,7 +6,7 @@ User=@user
 ExecStart=@exec
 
 Restart=on-failure
-RestartSec=5s
+RestartSec=3s
 
 [Install]
 WantedBy=default.target

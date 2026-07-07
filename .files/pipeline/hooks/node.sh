@@ -3,15 +3,10 @@
 #   - Must declare package.scripts.postinstall to build
 
 pre_install__node() {
-    test -f package.json || return 1
+    test -f package.json || panic "Could not find Node service package file."
     local install="install"
     test -f package-lock.json && install="ci"
-    if loading_enabled; then
-        npm "$install" > "$OUTPUT" 2>&1 &
-        loading "$1"
-    else
-        npm "$install" > "$OUTPUT" 2>&1
-    fi
+    npm "$install"
 }
 
 post_install__node() {

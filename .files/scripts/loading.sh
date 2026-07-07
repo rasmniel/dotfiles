@@ -21,12 +21,7 @@ __frame() {
     printf "\r[%s]" "$state" >&2; sleep 0.08
 }
 
-loading_enabled() {
-    test "${SILENT:-}" != true && test "${VERBOSE:-}" != true
-}
-
 loading() {
-    loading_enabled || panic "Unexpected loading usage."
     # Store global pid for loading state in order to kill lingering loading states on ctrl-c.
     LOADING_PID=$!
     local label="$1"

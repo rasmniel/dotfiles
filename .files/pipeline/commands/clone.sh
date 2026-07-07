@@ -9,7 +9,7 @@ clone_service() {
     test -d "./$SERVICE" && panic "Service \"$SERVICE\" already exists."
 
     ensure_ssh_deploy_key "$SERVICE" "$REMOTE"
-    git clone "$repo" > "$OUTPUT" 2>&1 || panic "Cannot clone repository \"$repo\""
+    git clone "$repo" || panic "Cannot clone repository \"$repo\""
 
     print_service "Cloned $REMOTE repository:" "$SERVICE"
 }
