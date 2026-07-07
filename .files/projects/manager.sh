@@ -1,5 +1,8 @@
 #! /usr/env/bin bash
 
+# Suppress warning about dynamically sourced files.
+# shellcheck disable=SC1091
+
 set -Eeuo pipefail
 
 . "$SCRIPT_ROOT/source.sh"
@@ -37,20 +40,32 @@ test -z "$PROJECT" && panic "No project provided."
 
 PROJECT_DIR="$PROJECT_ROOT/$PROJECT"
 
+cd_project() {
+    cd "$PROJECT_DIR" || panic "Project $PROJECT does not exist"
+}
+
+ensure_intent() {
+    test "$really" = true || panic 'Run with "--really" if you really mean it.'
+}
+
 # Execute command.
 case "$COMMAND" in
 
-    clone) clone_project ;;
+    clone)
+        clone_project
+        cd_project
+        ;;
 
     migrate)
         test -d "$PROJECT_DIR" || clone_project "$from"
+        cd_project
         push_origin
         ;;
 
     remove)
-        test "$really" = true || panic "Run with --really to really remove the project."
-        # TODO: Ensure not deleting projects with unpushed changes!
-        # cd "$PROJECT_DIR" &&
+        cd_project
+        git_ensure_clean
+        ensure_intent
         rm -rf "$PROJECT_DIR" ;;
 esac
 
