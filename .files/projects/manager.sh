@@ -39,6 +39,7 @@ PROJECT_DIR="$PROJECT_ROOT/$PROJECT"
 
 # Execute command.
 case "$COMMAND" in
+
     clone) clone_project ;;
 
     migrate)
@@ -47,8 +48,9 @@ case "$COMMAND" in
         ;;
 
     remove)
-        # TODO: Ensure not deleting projects with unpushed commits!
         test "$really" = true || panic "Run with --really to really remove the project."
+        # TODO: Ensure not deleting projects with unpushed changes!
+        # cd "$PROJECT_DIR" &&
         rm -rf "$PROJECT_DIR" ;;
 esac
 
