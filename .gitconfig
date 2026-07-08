@@ -1,22 +1,21 @@
 [alias]
     s = status
-    a = add .
+    a = add --all
     r = reset
     c = commit
     p = push
     m = merge
-    b = branch -av
+    b = branch
+    ba = branch -av
     t = tag
     f = fetch
-    l = log
     pl = pull
     co = checkout
     d = diff
     ds = diff --staged
-    go = log --all --decorate --oneline --graph
-    gr = log --all --decorate --graph --relative-date
-    nuke = !git reset HEAD --hard && git clean -fd
-    fire = !git add && git commit -m"FIRE!" && git push
+    l = log
+    gr = log --all --decorate --oneline --graph
+    tr = log --all --decorate --graph --relative-date
 
 [core]
     editor = "vi"

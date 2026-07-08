@@ -3,19 +3,34 @@ __not_detected() {
 }
 
 __detect_port() {
-    local pid=
-    pid="$(systemctl show -p MainPID --value "$SERVICE")"
-    test -z "$pid" && return
-
-    local sock=
-    sock="$(ss -ltnup | grep "$pid" || true)"
-    test -z "$sock" && return
-
     local port=
-    port="$(echo "$sock" | tr -s ' ' | cut -d ' ' -f5)"
-    test -z "$port" && return
 
-    printf "%s" "$port"
+    local pid=
+    local sock=
+    pid="$(systemctl show -p MainPID --value "$SERVICE")"
+    if [ -n "$pid" ]; then
+        sock="$(ss -ltnup | grep "$pid" || true)"
+        if [ -n "$sock" ]; then
+            port="$(echo "$sock" | tr -s ' ' | cut -d ' ' -f5)"
+            port="${port#*:*}"
+        fi
+    fi
+
+    # Attempt to derive the port from the service's caddy file.
+    if [ -z "$port" ]; then
+        local proxy=
+        proxy="$(cat "/etc/caddy/hosts.d/$SERVICE.caddy" | grep reverse_proxy)"
+        port="${proxy#*:*}"
+    fi
+
+    # Fallback to non-auto global port.
+    # If service was just created, it may not be immediately ready.
+    # shellcheck disable=SC2153
+    if [ -z "$port" ] && [ "$PORT" != auto ]; then
+        port="$PORT"
+    fi
+
+    test -n "$port" && printf "%s" "$port"
 }
 
 service_status() {
@@ -60,12 +75,8 @@ service_status() {
     if systemctl is-active --quiet "$SERVICE"; then
         local port=
         port="$(__detect_port)"
-        # Fallback to global port.
-        # If service was just created, it may not be immediately ready.
-        # shellcheck disable=SC2153
-        test -z "$port" && port="$PORT"
         if [ -n "$port" ]; then
-            print_service "Listening on port" "${port#*:*}"
+            print_service "Listening on port" "$port"
         else
             __not_detected "Service port"
         fi
