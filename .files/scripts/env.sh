@@ -1,5 +1,7 @@
-test -f "$SCRIPT_ROOT/.env" || panic "Environment missing at \"$SCRIPT_ROOT/.env\""
-# shellcheck disable=SC1091
+if [ ! -f "$SCRIPT_ROOT/.env" ]; then
+    printf 'Environment missing at "%s/.env"' "$SCRIPT_ROOT"
+    exit 1
+fi
+
 . "$SCRIPT_ROOT/.env"
 
-# TODO: Consider verifying environment here to avoid errors when referencing missing variables in subsequent scripts.

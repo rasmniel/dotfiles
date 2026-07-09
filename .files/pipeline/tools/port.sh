@@ -1,7 +1,7 @@
 __next_port() {
     local type="$1"
     local ports="$PIPELINE_ROOT/.ports"
-    test -f "$ports" || panic "The .ports file is missing. Cannot derive next port."
+    test -f "$ports" || cp "$ports.init" "$ports"
 
     local port_type
     port_type="$(cat "$ports" | grep "$type")"

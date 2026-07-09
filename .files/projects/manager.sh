@@ -13,7 +13,7 @@ test -z "${1:-}" && panic "No command provided."
 COMMAND="$1" # command to run.
 PROJECT="" # project to manage.
 REMOTE="$DEFAULT_GIT_REMOTE" # git remote to clone from.
-NAMESPACE="$DEFAULT_GIT_NAMESPACE" # git user to clone with.
+NAMESPACE="$DEFAULT_GIT_NAME" # git user to clone with.
 from="" # remote to migrate from.
 really=false # required for uninstalls.
 
