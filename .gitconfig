@@ -1,25 +1,28 @@
 [alias]
-    s = status
-    a = add --all
-    r = reset
-    c = commit
-    p = push
-    m = merge
-    b = branch
-    ba = branch -av
-    t = tag
-    f = fetch
-    pl = pull
-    co = checkout
-    d = diff
-    ds = diff --staged
-    l = log
-    gr = log --all --decorate --oneline --graph
-    tr = log --all --decorate --graph --relative-date
+	s = status
+	a = add --all
+	r = reset
+	c = commit
+	p = push
+	m = merge
+	b = branch
+	ba = branch -av
+	t = tag
+	f = fetch
+	pl = pull
+	co = checkout
+	d = diff
+	ds = diff --staged
+	l = log
+	gr = log --all --decorate --oneline --graph
+	tr = log --all --decorate --graph --relative-date
 
 [core]
-    editor = "vi"
+	editor = "vi"
+
+[init]
+	defaultBranch = main
 
 [include]
-     path = .gitconfig.local
+	path = .gitconfig.local
 
