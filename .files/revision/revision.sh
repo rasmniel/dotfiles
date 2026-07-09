@@ -8,12 +8,13 @@ work_tree_dir="$1"
 name="$(basename "$work_tree_dir")"
 branch="${2:-main}"
 branch_ref="refs/heads/$branch"
+log="$3"
 remote="git@$DEFAULT_GIT_REMOTE:$DEFAULT_GIT_NAME/$name.git"
 
 git check-ref-format --branch "$branch_ref" > /dev/null
 
 conflicts="$(find "$work_tree_dir" -name '*sync-conflict-*')"
-if [ -n "$conflict" ]; then
+if [ -n "$conflicts" ]; then
     echo "$conflicts"
     panic "Conflicts detected. Revision aborted."
 fi
@@ -39,8 +40,14 @@ work_tree add --all
 
 tree="$(work_tree write-tree)"
 parent="$(bare_git rev-parse FETCH_HEAD)"
-message="$(printf '%s, revision date: %s' "$name" "$(date -u +%Y-%m-%d/%H:%M:%S)")"
-commit="$(printf '%s\n' "$message" | work_tree commit-tree "$tree" --parent "$parent")"
+message="$(printf '%s, revision: %s' "$name" "$(date -u "+%Y-%m-%d %H:%M:%S")")"
+commit="$(printf '%s\n' "$message" | work_tree commit-tree "$tree" -p "$parent")"
 
 bare_git push --force-with-lease="$branch_ref:$parent" origin "$commit:$branch_ref"
+
+if [ -n "$log" ]; then
+    test -f "$log" || touch "$log"
+    echo "$message" >> "$log"
+    echo "$commit" >> "$log"
+fi
 
