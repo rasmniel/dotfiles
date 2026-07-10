@@ -42,7 +42,7 @@ service_status() {
     elif [ ! -d "$service_dest" ]; then
         print_failure "Not installed by pipeline:" "$SERVICE"
     else
-        print_identity "Status for service:" "$SERVICE"
+        print_identity "Service is installed:" "$SERVICE"
     fi
 
     if [ -d "$service_source" ]; then

@@ -20,6 +20,6 @@ service_exec__node() {
     local port="$2"
     local main
     main="$(jq -r '.main' package.json)"
-    test -n "$main" || panic "Node application $service does not declare package.main"
+    test -z "$main" || [ "$main" = "null" ] && panic "Node application $service does not declare package.main"
     printf "%s" "/srv/$service/bin/node /srv/$service/$main --port=$port"
 }
