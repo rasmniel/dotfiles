@@ -49,6 +49,6 @@ print_li() {
     test -z "$bullet" && bullet="-"
     local width="-${5:-12}"
     label="$(printf "%${width}s" "$label")"
-    print_output "$bullet $(print_color 01 "$color" "$label") $text"
+    printf '%s\n' "$bullet $(print_color 01 "$color" "$label") $text"
 }
 
