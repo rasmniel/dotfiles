@@ -18,9 +18,12 @@ __detect_port() {
 
     # Attempt to derive the port from the service's caddy file.
     if [ -z "$port" ]; then
-        local proxy=
-        proxy="$(cat "/etc/caddy/hosts.d/$SERVICE.caddy" | grep reverse_proxy)"
-        port="${proxy#*:*}"
+        local caddy_file="/etc/caddy/hosts.d/$SERVICE.caddy" 
+        if [ -f "$caddy_file" ]; then
+            local proxy=
+            proxy="$(cat "$caddy_file" | grep reverse_proxy)"
+            port="${proxy#*:*}"
+        fi
     fi
 
     # Fallback to non-auto global port.
