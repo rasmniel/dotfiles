@@ -19,8 +19,7 @@ setup_ufw() {
         return 1
     fi
 
-    sudo ufw allow from "$subnet" to any port ssh
+    sudo ufw allow from "$subnet"
     sudo ufw enable
     sudo ufw status verbose
-
 }
