@@ -36,7 +36,7 @@ print_failure_prefix() {
 
 panic() {
     print_failure_prefix "PANIC" "$1" >&2
-    kill -9 -- -$$ 2>&1 /dev/null
+    # kill -9 -- -$$ 2>&1 /dev/null
     exit 1
 }
 

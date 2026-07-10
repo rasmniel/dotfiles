@@ -12,7 +12,7 @@ setup_ufw() {
 
     subnet="$(ip route | grep "proto kernel" | head -1 | cut -d' ' -f1)"
     echo "You are about to enable a strict firewall policy."
-    echo "Deteced subnet mask $subnet as single-point SSH access."
+    echo "Deteced subnet mask $subnet as authorized LAN access."
     read -r -p "Is this correct? [y/N] > " confirm
     if [ "${confirm,,}" != 'y' ]; then
         echo "Subnet not confirmed. Aborted ufw setup. Firewall not enabled."
