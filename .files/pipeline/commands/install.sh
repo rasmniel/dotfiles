@@ -26,10 +26,6 @@ install_service() {
     sudo chmod -R u=rwX,go=rX "$service_dest"
     sudo chown -R root:root "$service_dest"
 
-    # If the directory contains a .env file, disable read permissions for group and other.
-    if [ -f "$service_dest/.env" ]; then
-        sudo chmod 600 "$service_dest/.env"
-    fi
     # If the directory contains a .git directory, delete it.
     if [ -f "$service_dest/.git" ]; then
         rm -rf "$service_dest/.git"
