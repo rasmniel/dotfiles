@@ -12,10 +12,6 @@ set -Eeuo pipefail
 # Source environment.
 . "$SCRIPT_ROOT/source.sh"
 
-panic_usage() {
-    panic "Usage: ppl <clone|service|expose|local|install|publish|uninstall|status> [--remote|--hard] <service>"
-}
-
 # Source pipeline tools.
 PIPELINE_ROOT="$(dirname "$0")"
 for c in "$PIPELINE_ROOT/commands/"*.sh; do . "$c"; done
@@ -27,10 +23,28 @@ trap 'on_err' ERR
 trap 'on_int' INT
 trap 'on_exit' EXIT
 
-command="$1"
+command=
+supported_commands=(
+    "clone"
+    "service"
+    "expose"
+    "local"
+    "install"
+    "publish"
+    "update"
+    "uninstall"
+    "status"
+    "list"
+)
+
+panic_usage() {
+    command_string="$(IFS=\|; echo "${supported_commands[*]}")"
+    panic "Usage: ppl <$command_string> service"
+}
+
 # Safely test that a supported command is passed.
-case "${1:-}" in
-    clone|service|expose|local|install|publish|uninstall|status) command="$1" ;;
+case "${supported_commands[*]}" in
+    *$1*) command="$1" ;;
     *) panic_usage ;;
 esac
 shift
@@ -61,8 +75,10 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-# Ensure service is set.
-test -z "$SERVICE" && panic_usage
+if [ "$command" != list ]; then
+    # Ensure service is set.
+    test -z "$SERVICE" && panic_usage
+fi
 
 # Detect port.
 if [ "$PORT" = auto ]; then
@@ -79,7 +95,7 @@ fi
 
 # Detect flavor.
 if [ "$FLAVOR" = auto ]; then
-    case "$command" in service|install|publish)
+    case "$command" in service|install|publish|update)
         FLAVOR="$(detect_flavor)"
         test -z "$FLAVOR" && panic "No build flavor detected or provided for service: $SERVICE"
         print_service "Flavor detected:" "$FLAVOR"
@@ -116,10 +132,21 @@ case "$command" in
         enable_service
         ;;
 
+    update)
+        clean_service
+        install_service
+        enable_service
+        ;;
+
     uninstall) uninstall_service "$hard" ;;
 
-    status) ;; # Status will always print.
+    list)
+        list_services
+        exit 0
+        ;;
 
+    status) ;; # Status will print by default.
 esac
 
 service_status
+

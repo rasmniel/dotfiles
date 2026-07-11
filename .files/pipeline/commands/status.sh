@@ -18,7 +18,7 @@ __detect_port() {
 
     # Attempt to derive the port from the service's caddy file.
     if [ -z "$port" ]; then
-        local caddy_file="/etc/caddy/hosts.d/$SERVICE.caddy" 
+        local caddy_file="/etc/caddy/hosts.d/$SERVICE.caddy"
         if [ -f "$caddy_file" ]; then
             local proxy=
             proxy="$(cat "$caddy_file" | grep reverse_proxy)"
@@ -85,8 +85,34 @@ service_status() {
         fi
 
         print_identity "Service is" "active"
-    else
+    elif [ -d "$service_dest" ]; then
         echo "Service is inactive"
     fi
 }
 
+list_services() {
+    declare -A services
+
+    # Idenify local services.
+    for server in /srv/*; do
+        local service=
+        service="$(basename "$server")"
+        services["$service"]="server"
+    done
+
+    # Identify caddy files.
+    for caddy_file in /etc/caddy/hosts.d/*.caddy; do
+        local service=
+        service="$(basename "$caddy_file")"
+        service="${service%*.caddy}"
+        if [ -z "${services["$service"]:-}" ]; then
+            services["$service"]="proxy"
+        else
+            services["$service"]+=", proxy"
+        fi
+    done
+
+    for service in "${!services[@]}"; do
+        print_service "$service:" "${services[$service]}"
+    done
+}
