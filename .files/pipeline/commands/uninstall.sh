@@ -1,6 +1,6 @@
 clean_service() {
     local service_dest="/srv/$SERVICE"
-    test -d "$service_dest" && sudo rm -fr "$service_dest"
+    test -d "$service_dest" && sudo rm -fr "$service_dest" || true
 }
 
 uninstall_service() {
