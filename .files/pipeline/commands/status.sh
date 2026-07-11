@@ -102,6 +102,7 @@ list_services() {
 
     # Identify caddy files.
     for caddy_file in /etc/caddy/hosts.d/*.caddy; do
+        test -e "$caddy_file" || continue
         local service=
         service="$(basename "$caddy_file")"
         service="${service%*.caddy}"
