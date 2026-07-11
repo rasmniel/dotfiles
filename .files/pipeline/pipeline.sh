@@ -135,7 +135,7 @@ case "$command" in
     update)
         clean_service
         install_service
-        enable_service
+        restart_service
         ;;
 
     uninstall) uninstall_service "$hard" ;;
