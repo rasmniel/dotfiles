@@ -1,7 +1,6 @@
 clean_service() {
     local service_dest="/srv/$SERVICE"
-    test -d "$service_dest" || panic "Cannot clean non-existent service."
-    sudo rm -fr "$service_dest"
+    test -d "$service_dest" && sudo rm -fr "$service_dest"
 }
 
 uninstall_service() {
