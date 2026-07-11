@@ -77,7 +77,7 @@ service_status() {
 
     if systemctl is-active --quiet "$SERVICE"; then
         local port=
-        port="$(__detect_port)"
+        port="$(__detect_port || true)"
         if [ -n "$port" ]; then
             print_service "Listening on port" "$port"
         else
