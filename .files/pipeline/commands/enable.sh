@@ -9,8 +9,8 @@ enable_service() {
 
 restart_service() {
     local service_file="/etc/systemd/system/$SERVICE.service"
-    if [ -f "$service_file" ]; then
-        printf 'No service file found at "%s". Cannot restart service "%s"' "$service_file" "$SERVICE"
+    if [ ! -f "$service_file" ]; then
+        printf 'No service file found at "%s". Cannot restart service "%s"\n' "$service_file" "$SERVICE"
         return
     fi
 
