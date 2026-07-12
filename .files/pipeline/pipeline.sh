@@ -23,30 +23,9 @@ trap 'on_err' ERR
 trap 'on_int' INT
 trap 'on_exit' EXIT
 
-command=
-supported_commands=(
-    "clone"
-    "service"
-    "expose"
-    "local"
-    "install"
-    "publish"
-    "update"
-    "uninstall"
-    "status"
-    "list"
-)
-
-panic_usage() {
-    command_string="$(IFS=\|; echo "${supported_commands[*]}")"
-    panic "Usage: ppl <$command_string> service"
-}
-
 # Safely test that a supported command is passed.
-case "${supported_commands[*]}" in
-    *$1*) command="$1" ;;
-    *) panic_usage ;;
-esac
+command="${1:-}"
+test -v SUPPORTED_COMMANDS["$command"] || panic_usage
 shift
 
 SERVICE="" # name of the service in question.
@@ -82,7 +61,7 @@ fi
 
 # Detect port.
 if [ "$PORT" = auto ]; then
-    case "$command" in service|expose|install|publish)
+    case "$command" in service|caddy|install|publish)
         if [ -n "$PUBLIC_DOMAIN" ]; then
             PORT=$(next_public_port)
         else
@@ -96,7 +75,7 @@ fi
 # Detect flavor.
 if [ "$FLAVOR" = auto ]; then
     case "$command" in service|install|publish|update)
-        FLAVOR="$(detect_flavor)"
+        FLAVOR="$(detect_flavor || true)"
         test -z "$FLAVOR" && panic "No build flavor detected or provided for service: $SERVICE"
         print_service "Flavor detected:" "$FLAVOR"
     esac
@@ -111,7 +90,7 @@ case "$command" in
         enable_service
         ;;
 
-    expose) caddy_file ;;
+    caddy) caddy_file ;;
 
     local)
         service_file
@@ -142,7 +121,7 @@ case "$command" in
 
     list)
         list_services
-        exit 0
+        test -z "$SERVICE" && exit 0
         ;;
 
     status) ;; # Status will print by default.

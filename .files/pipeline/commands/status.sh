@@ -113,6 +113,12 @@ list_services() {
         fi
     done
 
+    # Determine if identified services have respective service files.
+    for service in "${!services[@]}"; do
+        test -f "/etc/systemd/system/$service.service" || continue
+        services["$service"]="service, ${services["$service"]}"
+    done
+
     for service in "${!services[@]}"; do
         print_service "$service:" "${services[$service]}"
     done

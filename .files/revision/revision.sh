@@ -43,7 +43,7 @@ parent="$(bare_git rev-parse FETCH_HEAD)"
 # Write and commit work-tree.
 work_tree add --all
 tree="$(work_tree write-tree)"
-message="$(printf '%s, revision: %s' "$name" "$(date -u "+%Y-%m-%d %H:%M:%S")")"
+message="$(printf '%s, revision: %s' "$name" "$(date "+%Y-%m-%d %H:%M:%S")")"
 commit="$(printf '%s\n' "$message" | work_tree commit-tree "$tree" -p "$parent")"
 
 # Push to the remote if the current branch matches the remote HEAD.

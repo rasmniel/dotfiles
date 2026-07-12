@@ -30,14 +30,14 @@ if [ -z "$1" ]; then
     echo
     echo "Available packages:"
     echo
-    print_li "apt" "Setup default apt packages." "$(state_color "apt")" "$(state_bullet "apt")"
-    print_li "nvim" "Setup Neovim 0.11 from official repository." "$(state_color "nvim")" "$(state_bullet "nvim")"
-    print_li "font" "Setup JetBrainsMono nerd font." "$(state_color "font")" "$(state_bullet "font")"
-    print_li "caddy" "Setup and launch Caddy from official third-party repository." "$(state_color "caddy")" "$(state_bullet "caddy")"
-    print_li "mise" "Setup mise with official script @ mise.run and install packages." "$(state_color "mise")" "$(state_bullet "mise")"
-    print_li "ufw" "Setup and enable uncomplicated firewall with strict webhost rules." "$(state_color "ufw")" "$(state_bullet "ufw")"
-    print_li "tailscale" "Setup and launch the Tailscale client." "$(state_color "tailscale")" "$(state_bullet "tailscale")"
-    print_li "syncthing" "Setup and launch the Syncthing server." "$(state_color "syncthing")" "$(state_bullet "syncthing")"
+    print_li "apt" "Setup default apt packages." "$(state_bullet "apt")" "$(state_color "apt")"
+    print_li "nvim" "Setup Neovim 0.11 from official repository." "$(state_bullet "nvim")" "$(state_color "nvim")"
+    print_li "font" "Setup JetBrainsMono nerd font." "$(state_bullet "font")" "$(state_color "font")"
+    print_li "caddy" "Setup and launch Caddy from official third-party repository." "$(state_bullet "caddy")" "$(state_color "caddy")"
+    print_li "mise" "Setup mise with official script @ mise.run and install packages." "$(state_bullet "mise")" "$(state_color "mise")"
+    print_li "ufw" "Setup and enable uncomplicated firewall with strict webhost rules." "$(state_bullet "ufw")" "$(state_color "ufw")"
+    print_li "tailscale" "Setup and launch the Tailscale client." "$(state_bullet "tailscale")" "$(state_color "tailscale")"
+    print_li "syncthing" "Setup and launch the Syncthing server." "$(state_bullet "syncthing")" "$(state_color "syncthing")"
     echo
     echo "Usage: setup package1 package2 package3 ..."
 fi

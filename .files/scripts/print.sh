@@ -35,7 +35,7 @@ print_failure_prefix() {
 }
 
 panic() {
-    print_failure_prefix "PANIC" "$1" >&2
+    print_failure_prefix "PANIC" "${1:-}" >&2
     # kill -9 -- -$$ 2>&1 /dev/null
     exit 1
 }
@@ -43,10 +43,8 @@ panic() {
 print_li() {
     local label="$1"
     local text="$2"
-    local color="${3:-}"
-    test -z "$color" && color="$DEFAULT_PRINT_COLOR"
-    local bullet="${4:-}"
-    test -z "$bullet" && bullet="-"
+    local bullet="${3:--}"
+    local color="${4:-$DEFAULT_PRINT_COLOR}"
     local width="-${5:-12}"
     label="$(printf "%${width}s" "$label")"
     printf '%s\n' "$bullet $(print_color 01 "$color" "$label") $text"
