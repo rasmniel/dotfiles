@@ -10,8 +10,10 @@ if [ ! -f /etc/motd ]; then
     exit 1
 fi
 
-sudo truncate -s 0 /etc/motd || exit 1
+# Extra motd may exist at `/etc/update-motd.d/10-uname` or similar.
 motd=/etc/update-motd.d/10-motd
+
+sudo truncate -s 0 /etc/motd || exit 1
 test -f "$motd" && sudo rm "$motd"
 sudo cp ./motd.sh "$motd"
 sudo chmod +x "$motd"
