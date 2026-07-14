@@ -46,3 +46,4 @@ if [ "$(vcgencmd get_throttled)" != 'throttled=0x0' ]; then
     output Voltage: "${voltage#volt=*}"
 fi
 
+echo
