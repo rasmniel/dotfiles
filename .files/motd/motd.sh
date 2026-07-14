@@ -24,6 +24,7 @@ disk_avail="$(echo "$disk" | cut -d' ' -f4)"
 disk_pct="$(echo "$disk" | cut -d' ' -f5)"
 
 # Output
+echo
 output Host: "$host@$ip"
 output OS: "$(uname -o) $(uname -m)"
 output Release: "$(uname -r)"
