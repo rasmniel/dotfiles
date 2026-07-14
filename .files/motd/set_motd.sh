@@ -12,7 +12,7 @@ fi
 
 sudo truncate -s 0 /etc/motd || exit 1
 motd=/etc/update-motd.d/10-motd
-test -f "$motd" || sudo rm "$motd"
-cp ./motd.sh "$motd"
-chmod +x "$motd"
+test -f "$motd" && sudo rm "$motd"
+sudo cp ./motd.sh "$motd"
+sudo chmod +x "$motd"
 
