@@ -28,7 +28,7 @@ SETUP_ROOT="$(dirname "$0")"
 for p in "$SETUP_ROOT/packages/"*; do . "$p"; done
 . "$SETUP_ROOT/state.sh"
 
-if [ -z "$1" ]; then
+if [ -z "${1:-}" ]; then
     echo
     echo "Available packages:"
     echo
