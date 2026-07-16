@@ -4,6 +4,8 @@
 # shellcheck disable=SC1090
 # shellcheck disable=SC1091
 
+set -Eeuo pipefail
+
 trap 'kill "$(jobs -p)"; exit 130;' INT
 
 # Source environment.
@@ -33,6 +35,7 @@ if [ -z "$1" ]; then
     print_li "apt" "Setup default apt packages." "$(state_bullet "apt")" "$(state_color "apt")"
     print_li "nvim" "Setup Neovim 0.11 from official repository." "$(state_bullet "nvim")" "$(state_color "nvim")"
     print_li "font" "Setup JetBrainsMono nerd font." "$(state_bullet "font")" "$(state_color "font")"
+    print_li "keepass" "Setup KeePassXC with Flatpak." "$(state_bullet "keepass")" "$(state_color "keepass")"
     print_li "brave" "Setup the Brave browser from official third-party repository." "$(state_bullet "brave-browser")" "$(state_color "brave-browser")"
     print_li "caddy" "Setup and launch Caddy from official third-party repository." "$(state_bullet "caddy")" "$(state_color "caddy")"
     print_li "mise" "Setup mise with official script @ mise.run and install packages." "$(state_bullet "mise")" "$(state_color "mise")"
@@ -50,6 +53,7 @@ while [ $# -gt 0 ]; do
         apt) setup_apt ;;
         nvim) setup_nvim ;;
         font) setup_nerd_font ;;
+        keepass) keepass ;;
         brave) setup_brave ;;
         caddy) setup_caddy ;;
         mise) setup_mise ;;
