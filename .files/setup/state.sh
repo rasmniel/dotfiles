@@ -15,7 +15,7 @@ state() {
         apt) command -v jq > /dev/null && enabled=true ;;
         ufw) test "$(grep "^ENABLED=" /etc/ufw/ufw.conf)" = "ENABLED=yes" && enabled=true ;;
         font) test -d "$FONTS_DIR/JetBrainsMono" && enabled=true ;;
-        keepass) command -v flatpak > /dev/null && flatpak info org.keepassxc.KeePassXC > /dev/null && enabled=true ;;
+        keepass) command -v flatpak > /dev/null && flatpak info org.keepassxc.KeePassXC > /dev/null 2>&1 && enabled=true ;;
         *) command -v "$1" > /dev/null && enabled=true ;;
     esac
 

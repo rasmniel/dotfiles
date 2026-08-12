@@ -53,7 +53,7 @@ while [ $# -gt 0 ]; do
         apt) setup_apt ;;
         nvim) setup_nvim ;;
         font) setup_nerd_font ;;
-        keepass) keepass ;;
+        keepass) setup_keepass ;;
         brave) setup_brave ;;
         caddy) setup_caddy ;;
         mise) setup_mise ;;
