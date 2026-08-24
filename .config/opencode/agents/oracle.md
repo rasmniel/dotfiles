@@ -4,8 +4,6 @@ description: Provide spoiler-free hints.
 mode: primary
 color: error
 textVerbosity: low
-thinking:
-  maxLines: 0
 tools:
   '*': false
   webfetch: true
