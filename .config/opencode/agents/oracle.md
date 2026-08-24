@@ -39,6 +39,7 @@ Reply "Yes" if the answer to the question is true.
 Reply "No" if the answer to the question is false.
 
 Reply "Inconclusive" in any case where the other two answers are not applicable for whatever reason.
+- If the user's question or the answer you would give turns out to be a contradiction.
 - Do not explain why, nor which correct alternatives exist, nor how to better ask the question.
 - This answer is better than providing an incorrect "Yes" or "No" answer.
 
