@@ -1,18 +1,14 @@
 ---
 name: react-setup
-description: Set up React web projects with sensible defaults and dependencies or extend or adjust established architecture with respect to existing implementation. Use when setting up a full React project or parts of a React project from scratch or editing existing React architecture.
+description: Set up and evolve React projects with sensible defaults, respecting established architecture. Use for React project setup and architecture changes.
 ---
-
-TODO: Better description with notes about opinionation and framework preference recap
-TODO: styling, suggestion: autoprefixer, postcss, sass
-TODO: Split this file into smaller files to maintain skill parsability despite its size
 
 # React setup
 
 This React setup skill helps provide assistance in setting up React codebases consistently.
 
 Certain parts of this skill are deliberately kept underspecified to avoid over-defining the scope.
-In greenfield scenarios, consult the user regarding ambiguities and unknowns instead of making assumptions.
+In greenfield scenarios, consult the user regarding material ambiguities and unknowns instead of making assumptions.
 
 The purpose of this skill is to create missing pieces from scratch and fill in gaps.
 It is not the purpose of this skill to proactively align existing projects or impose changes to features that already work.
@@ -22,6 +18,7 @@ It is not the purpose of this skill to proactively align existing projects or im
 
 Respect and preserve established project architecture, verifying and reusing existing approaches where possible.
 Absent or underspecified implementation may be filled using these defaults, but does not by itself justify imposing defaults on established architecture.
+Treat established alternatives to the defaults as project decisions, not as deficiencies.
 
 Follow this precedence hierarchy.
 
@@ -39,6 +36,16 @@ Apply the guidelines in this skill according to the scope of the work.
 3. **Restructure**: Use this skill as guidance, preserving established architecture unless explicitly instructed.
     - Architectural rewrites are always explicitly initiated by the user.
 
+### Greenfield
+
+This skill chiefly focuses on greenfield projects and the early steps that establish foundational architecture.
+The presence of any pre-existing files in a project could indicate that the project is not in a greenfield state.
+Do not assume greenfield state if any established concepts can be detected before work begins.
+
+Before starting work in a project, determine if the project already has established conventions and make sure to prioritize those over greenfield defaults.
+Verify the root of the React project before starting, as you may be working in a monorepo or similar where there may be other files not pertaining to the greenfield project.
+Even in greenfield scenarios, remember to run available checking scripts to ensure a proper development process.
+
 ### Configuration
 
 Aim to preserve established configuration.
@@ -48,8 +55,13 @@ When changing configuration, consider the impact on existing code.
 
 ## Project dependencies
 
-Install project dependencies as needed.
-Add missing npm scripts only when they are supported by the installed project dependencies.
+Install project dependencies only as needed.
+
+Greenfield defaults are expressed using npm, which is the greenfield choice.
+If the project uses another package manager, some package script invocations outlined in this skill must be adapted.
+
+Any existing package management configuration must be preserved and reused.
+Add missing package scripts only when they are supported by the installed project dependencies.
 
 Do not replace an already implemented framework in an existing project.
 Do not migrate established tools or packages to this outline unless explicitly instructed.
@@ -60,28 +72,14 @@ When migrating, prefer a piece-by-piece approach over full-scale rewrites.
 React is our UI framework of choice and the baseline for this skill.
 Projects that use another UI framework than React should not be considered with this skill.
 
-Associated runtime packages
-- react
-- react-dom
-
 ### TypeScript
 
 Greenfield projects must use TypeScript.
-Use `tsc` consistently to ensure type-checking is performed.
+Use type-checking consistently as part of setup and development.
+Add a `tsc` package script if the project package is missing a type-checking script.
+Derive the command from the existing project or consult the user on how to write the type-checking command.
+
 Do not migrate an established JavaScript codebase to TypeScript unless explicitly instructed.
-
-Associated dev packages:
-- typescript
-- @types/node
-- @types/react
-- @types/react-dom
-
-Associated npm scripts
-```json
-{
-    "tsc": "tsc -b"
-}
-```
 
 ### Vite
 
@@ -89,98 +87,46 @@ The chosen toolchain is Vite, used to transpile and serve the app.
 If another toolchain exists, do not replace it unless instructed.
 
 We try to assume as little as possible about the Vite config, because it can be very specific for each individual project.
-For greenfield projects, we use the following `vite.config.ts` shape.
-Keep in mind that even in greenfield projects, this configuration may already contain important bits and pieces that must be preserved.
+Keep in mind that even after scaffolding, the Vite configuration may contain important bits and pieces that must be preserved.
 
-```ts
-import react from '@vitejs/plugin-react'
-import { defineConfig, loadEnv } from 'vite'
+In greenfield projects the Vite config should follow these rules.
 
-export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, process.cwd(), '')
-    const port = parseInt(env.PORT) || 3000
+- Fall back to 3000 as default port
+- Only produce sourcemaps for builds targeting development mode
+- Allow disabling `server.hmr` with a `DISABLE_HMR` environment variable
 
-    return {
-        // ...
-
-        plugins: [react()]
-
-        build: {
-            sourcemap: mode === 'development',
-        },
-
-        preview: {
-            port
-        },
-
-        server: {
-            port,
-            hmr: env.DISABLE_HMR !== 'true',
-            host: true,
-        }
-    }
-})
-```
-
-Associated dev packages
-- vite
-- @vitejs/plugin-react
-
-Associated npm scripts
+Associated package scripts
 ```json
 {
     "start": "vite",
     "dev": "vite",
     "preview": "vite preview",
     "build": "npm run tsc && vite build",
-    "build:prod": "npm run build -- --mode production",
-    "build:dev": "npm run build -- --mode development"
+    "build:dev": "npm run build -- --mode development",
+    "build:prod": "npm run build -- --mode production"
 }
 ```
 
 ### Vitest
 
-Use Vitest for testing, if Vite is the established toolchain.
-Otherwise, defer to the user for a decision on testing tools.
+Always use the established testing strategy if one exists.
+If Vite is the established toolchain, use Vitest for testing.
+If an existing project doesn't use Vite and no testing strategy is established, defer to the user for a decision on testing.
 
-As a starting point, we test only tooling and logic, not `.tsx` files or React-related code.
-Defaults exclude the appropriate files for this purpose.
+In greenfield projects Vitest should be configured with these requirements.
 
-For testing we use the following defaults, added to `vite.config.ts`.
-Do not merge configurations if a testing configuration is already established.
+- UI and coverage should not run by default
+- Use Vitest's default coverage provider to generate coverage reports in a top level `coverage` directory.
+- Include and exclude files appropriately as needed to support the setup correctly and simply.
 
-```ts
-{
-    // ...
+Follow these rules for testing in greenfield projects.
 
-    test: {
-        // Vitest UI is enabled with --ui CLI arg.
-        ui: false,
-        silent: 'passed-only',
-        // Generate coverage report available in Vitest UI.
-        coverage: {
-            // Coverage is enabled with --coverage CLI arg.
-            enabled: false,
-            reporter: ['text', 'html', 'lcov'],
-            reportsDirectory: 'coverage',
-            include: ['src/**/*.{js,ts}'],
-            exclude: ['src/_generated/**'],
-        }
-    }
-}
-```
+- Test only framework-independent tooling and application logic.
+- Do not test React components, hooks, contexts, etc. unless instructed.
+- Do not test generated code unless instructed.
 
-Also add the Vitest config type to the top of the file
-```ts
-/// <reference types="vitest/config" />
-```
 
-Associated dev packages
-- vitest
-- @vitest/coverage-v8
-- @vitest/ui
-
-Associated npm scripts
+Associated package scripts
 ```json
 {
     "test": "vitest run",
@@ -191,9 +137,9 @@ Associated npm scripts
 
 ### Prettier
 
-Formatting is a must, and we prefer to use Prettier.
+Use Prettier as a formatter in greenfield projects.
 
-In greenfield projects, use the following `.prettierrc` configuration shape.
+Use the following `.prettierrc` configuration shape when one doesn't exist.
 ```json
 {
     "printWidth": 100,
@@ -214,10 +160,7 @@ _generated
 package-lock.json
 ```
 
-Associated dev packages
-- prettier
-
-Associated npm scripts
+Associated package scripts
 ```json
 {
     "format": "prettier --check .",
@@ -227,49 +170,19 @@ Associated npm scripts
 
 ### ESLint
 
-Linting is a must, and we prefer to use ESLint.
+Use ESLint as a linter in greenfield projects.
 
 We use linting to protect the code from bugs and errors, not to strain the developer.
 Any rules ignored by the established configuration must be respected.
 
 Lint configuration should ignore transpiled and generated code.
-For greenfield projects, we use the following `eslint.config.js` file.
+For greenfield projects, we use the recommended defaults as provided by ESLint itself and related React packages.
 Keep in mind that even in greenfield projects this file may already exist, in which case it should not implicitly be changed.
 
-```js
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
-
-export default defineConfig([
-    globalIgnores(['dist', 'src/_generated']),
-    {
-        files: ['src/**/*.{ts,tsx}'],
-        extends: [
-            js.configs.recommended,
-            tseslint.configs.recommended,
-            reactHooks.configs.flat.recommended,
-        ],
-        languageOptions: {
-            globals: globals.browser,
-        },
-    },
-])
-```
-
-Associated dev packages
-- eslint
-- @eslint/js
-- typescript-eslint
-- globals
-- eslint-plugin-react-hooks
-
-Associated npm scripts
+Associated package scripts
 ```json
 {
-    "lint": "eslint src/"
+    "lint": "eslint ."
 }
 ```
 
@@ -281,53 +194,44 @@ The generator reads an API specification and generates a client and the necessar
 Using the OpenAPI generator is predicated on the API actually following and declaring such a specification.
 In cases where the API does not, we do not include this dependency.
 
-The following command can generate the client for an API.
-Instead of running the command directly in the CLI, the client generation should be standardized as an npm script called `npm run generate-api`.
+The OpenAPI generator should be used with the following constraints.
 
-```sh
-openapi-generator-cli generate -i "<API_URL/VERSION/DOMAIN>" -g typescript-fetch -o "src/_generated/api/<DOMAIN>" --additional-properties=useSingleRequestParameter=true
-```
+- Generate a TypeScript-fetch client
+- Output generated code to `src/_generated/api/<domain>`
+- Enable single request parameter
 
-In many cases it is necessary to create a script file that parameterizes the domain and version of the generator and more, to create multiple different clients consistently.
+Instead of running a generation command directly in the CLI, the client generation should be standardized as a package script called `generate-api`.
+
+In many cases it is necessary to create a workflow script file that parameterizes the domain and version of the generator and more, to create multiple different clients consistently.
 Such a function should be compatible with the project, e.g. written in JavaScript or TypeScript.
-Commands for such parameterized API generator scripts should be `npm run generate-api:domain` according to their domain.
-In cases where multiple parameterized API client generators are declared, we also want to consolidate these with `npm run generate-api:all`.
+Commands for such parameterized API generator scripts should be `generate-api:<domain>` according to their domain.
+In cases where multiple parameterized API client generators are declared, we also want to consolidate these with `generate-api:all`.
 
-The code generated by the OpenAPI generator must not be edited directly, but must be checked into version control.
-Typically, the user will initiate API client generation. You must not regenerate the API client without permission from the user.
+The code generated by the OpenAPI generator must not be edited directly, but should be checked into version control.
+Typically, the user will initiate API client generation. Do not regenerate the API client unless required by the requested work or explicitly instructed.
 Problems with the API client should be flagged and reported for correction to those responsible for the API specification.
 Always consult the user when generated code causes problems that cannot be solved within the given constraints by the generated clients.
 
-Associated dev packages
-- @openapitools/openapi-generator-cli
 
+## Scaffolding
 
-## Bootstrapping
+Scaffold greenfield projects with the current official Vite scaffolding mechanism and apply defaults to the resulting structure.
+You should discover the current recommended approach to scaffolding yourself and how to execute it to accommodate declared defaults as accurately as possible.
+Only bootstrap defaults indiscriminately when the project is truly a greenfield project.
 
-Scaffold greenfield projects with `npm create`.
-If `npm create` has already been run or is not right for this project, missing dependencies should be installed with the latest mutually compatible version with `npm install`.
-Before determining the version to install, check the local environment and make sure to consult the user if the latest tools are not available.
-
-- Runtime packages should be installed with `npm install --save package1 package2 ...`
-- Dev packages should be installed with `npm install --save-dev package1 package2 ...`
-
+If scaffolding has already been run or is not right for this project, missing dependencies should be installed manually.
+Allow the established package manager to resolve appropriate versions of requested packages, but forward concerns for any considerable vulnerabilities in installed packages.
 If the install command is not directly runnable, provide the command to the user and let them run it instead.
+After scaffolding the project and applying greenfield defaults, ensure the project is still functional by building the project and running linting, type-checking, tests, etc.
+Files immediately resulting from a scaffolding command are considered part of the greenfield baseline.
 
-### Scaffolding
-
-In greenfield scenarios, the user will typically scaffold the project using `npm create`.
-This means that a lot of structure will exist and the project should already be runnable.
-
-Otherwise, the following command can be used to scaffold the project in an empty directory.
-Make sure to get the user's permission before running the scaffolding command.
-
-```sh
-npm create vite@latest . --yes -- --template react-ts --eslint --no-interactive
-```
+Before performing an initial setup, provide the user with an overview of what will be installed and created.
+Only when the users has seen and confirmed the setup can installation and scaffolding of files begin.
 
 ### Environment
 
-Every project needs an environment file.
+Discover existing environment setup before tampering with environment variables.
+For greenfield projects, add an environment file setup.
 Projects created with this skill need two mandatory environment files.
 
 - `.env`: The live environment as it is used by the system locally.
@@ -335,21 +239,21 @@ Projects created with this skill need two mandatory environment files.
     - You must not inspect this file without explicit permission.
 - `.env.init`: An environment outline file describing the setup with placeholder values.
     - This file should be used as a template to create the environment file and is checked into version control.
+    - In existing projects, this file may exist with a different but similar name.
 
-Employ the following npm script to ensure `.env` always exists.
+Add the following package script to generate an `.env` file from template, and run it if no `.env` file exists yet.
 ```json
 {
-    "postinstall": "npm run init-env",
     "init-env": "node ./scripts/init-env.js"
 }
 ```
 
-The `scripts/init-env.js` script ensures cross-platform support.
+The `scripts/init-env.js` workflow script ensures cross-platform support.
 ```js
-import fs from 'fs'
-
-if (!fs.existsSync('.env'))
-    fs.cpSync('.env.init', '.env')
+import('fs').then((fs) => {
+    if (!fs.existsSync('.env'))
+        fs.cpSync('.env.init', '.env')
+})
 ```
 
 Note that environment variables used inside the Vite-built client-side source code must be prefixed with `VITE_`.
@@ -360,9 +264,11 @@ If an API integration should be included or if the OpenAPI generator is installe
 
 ### Version control
 
-Use git for version control.
+We use Git for version control, unless an alternative is explicitly established.
+Do not modify Git state directly through the CLI, unless instructed.
 
-Include the following gitignore in a project when it's missing.
+Include the following gitignore file in a project when it's missing.
+When necessary, add appropriate missing lines to the existing gitignore.
 ```gitignore
 .env
 node_modules
@@ -403,8 +309,8 @@ test/                   # Test suite
 ### Domain transport
 
 Stick as closely as possible to the unidirectional data flow employed by React.
-Strive to implement the following chain of communication with the given direction.
-This dependency chain does not require every abstraction layer to exist.
+Strive to implement the following data flow in the given direction.
+This data flow does not require every abstraction layer to exist.
 Layers that add no additional value may be omitted.
 
 ```
