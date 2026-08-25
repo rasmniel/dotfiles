@@ -95,7 +95,7 @@ In greenfield projects the Vite config should follow these rules.
 - Only produce sourcemaps for builds targeting development mode
 - Allow disabling `server.hmr` with a `DISABLE_HMR` environment variable
 
-Associated package scripts
+**Associated package scripts**
 ```json
 {
     "start": "vite",
@@ -126,7 +126,7 @@ Follow these rules for testing in greenfield projects.
 - Do not test generated code unless instructed.
 
 
-Associated package scripts
+**Associated package scripts**
 ```json
 {
     "test": "vitest run",
@@ -160,7 +160,7 @@ _generated
 package-lock.json
 ```
 
-Associated package scripts
+**Associated package scripts**
 ```json
 {
     "format": "prettier --check .",
@@ -179,7 +179,7 @@ Lint configuration should ignore transpiled and generated code.
 For greenfield projects, we use the recommended defaults as provided by ESLint itself and related React packages.
 Keep in mind that even in greenfield projects this file may already exist, in which case it should not implicitly be changed.
 
-Associated package scripts
+**Associated package scripts**
 ```json
 {
     "lint": "eslint ."
