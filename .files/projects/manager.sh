@@ -19,8 +19,8 @@ really=false # required for uninstalls.
 
 # Ensure command argument.
 case "$COMMAND" in
-    clone|migrate|remove) ;;
-    *) panic "Usage: pm <clone|remove> <project>" ;;
+    create|clone|migrate|remove) ;;
+    *) panic "Usage: pm <create|clone|migrate|remove> <project>" ;;
 esac
 shift
 
@@ -40,6 +40,10 @@ test -z "$PROJECT" && panic "No project provided."
 
 PROJECT_DIR="$PROJECT_ROOT/$PROJECT"
 
+mk_project() {
+    test -d "$PROJECT_DIR" || mkdir "$PROJECT_DIR"
+}
+
 cd_project() {
     cd "$PROJECT_DIR" || panic "Project $PROJECT does not exist"
 }
@@ -50,6 +54,11 @@ ensure_intent() {
 
 # Execute command.
 case "$COMMAND" in
+
+    create)
+        mk_project
+        cd_project
+        ;;
 
     clone)
         clone_project

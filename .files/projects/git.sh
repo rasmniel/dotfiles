@@ -4,7 +4,12 @@ git_uri() {
     printf "git@%s:%s/%s" "$actual_remote" "$NAMESPACE" "$PROJECT"
 }
 
+git_exists() {
+    test -d "$PROJECT_DIR/.git"
+}
+
 git_ensure_clean() {
+    git_exists || return 0
     test -n "$(git status --porcelain)" && panic "Project $PROJECT has uncommitted changes."
     test "$(git rev-list --count "@{u}..HEAD" 2>/dev/null)" -gt 0 && panic "Project $PROJECT has unpushed commits."
     return 0

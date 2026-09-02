@@ -1,6 +1,6 @@
 ---
 name: react-setup
-description: Set up and evolve React projects with sensible defaults, respecting established architecture. Use for React project setup and architecture changes.
+description: Set up and evolve React projects with sensible defaults, respecting established architecture. Use for React centric project setup and architecture changes.
 ---
 
 # React setup
