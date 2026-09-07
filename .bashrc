@@ -41,6 +41,8 @@ test -f "$HOME/.bashrc.local" && . "$HOME/.bashrc.local"
 # Activate mise, if installed
 command -v mise > /dev/null && eval "$(mise activate bash)"
 
+# Enter tmux, if installed and not already in tmux
+test -z "$TMUX" && command -v tmux > /dev/null && exec tmux new-session
 
 # Stow-away zone below this point.
 

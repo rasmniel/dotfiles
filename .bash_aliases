@@ -57,3 +57,11 @@ alias clip='clip'
 alias clip_rsa='clip ~/.ssh/id_rsa.pub'
 alias clip_ed25519='clip ~/.ssh/id_ed25519.pub'
 
+# pushd/popd shorthand
+pd() {
+    if [ "$#" -gt 0 ]; then
+        pushd "$1" || return
+    else
+        popd || return
+    fi
+}

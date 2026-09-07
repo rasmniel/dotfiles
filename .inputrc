@@ -22,7 +22,7 @@ set enable-bracketed-paste on
 # Disable active regions
 set enable-active-region off
 
-# Enable vi-mode.
+# Enable and configure vi-mode.
 set editing-mode vi
 # Improve vi-mode in prompt.
 set show-mode-in-prompt on
@@ -36,3 +36,9 @@ set show-mode-in-prompt on
 set vi-cmd-mode-string "\1\e[2 q\2"
 set vi-ins-mode-string "\1\e[6 q\2"
 
+set keymap vi-command
+# Disable vi-mode V to avoid opening commands in an editor.
+"v": abort
+
+# Revert to insert mode keybinds after this point.
+set keymap vi-insert

@@ -7,6 +7,8 @@ setup_apt() {
         wget \
         git \
         vim \
+        alacritty \
+        tmux \
         unzip \
         xclip \
         jq \

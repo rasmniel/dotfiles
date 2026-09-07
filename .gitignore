@@ -19,6 +19,14 @@
 # Base config directory
 !.config/
 
+# Alacritty config
+!.config/alacritty
+!.config/alacritty/**
+
+# Tmux config
+!.config/tmux
+!.config/tmux/**
+
 # Neovim config
 !.config/nvim
 !.config/nvim/**
@@ -30,4 +38,3 @@
 # Opencode config
 !.config/opencode
 !.config/opencode/**
-
