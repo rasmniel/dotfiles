@@ -7,7 +7,10 @@ alias d='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 alias rc='nvim ~/.bashrc'
 alias src='source ~/.bashrc'
 
-# Systemd shorthands
+# tmux shorthands
+alias tks='tmux kill-server'
+
+# systemd shorthands
 alias sc='sudo systemctl'
 alias scr='sudo systemctl daemon-reload'
 

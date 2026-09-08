@@ -64,16 +64,3 @@ If you discover actionable TODOs in code directly related to the current task, y
 When you have completed and verified the task, you should briefly report what you changed and how you verified it.
 If the task could not be correctly completed without deteriorating behavior, you must report it as a blocking incident instead of degrading the implementation.
 
-
-## dots
-
-Your task will be provided to you briefly, including an ID of the task.
-Before you start work, you should consult the concise description of the task using the following command template.
-
-```
-dot show <id>
-```
-
-You must NOT change tasks.
-You must only read tasks.
-

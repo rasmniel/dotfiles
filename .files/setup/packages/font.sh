@@ -1,5 +1,5 @@
 JETBRAINS_FONT_DIR="$FONTS_DIR/JetBrainsMono"
-FONTCONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/fontconfig/conf.d"
+FONTCONFIG_DIR="$HOME/.config/fontconfig/conf.d"
 FONTCONFIG_FILE="$FONTCONFIG_DIR/99-nerd-font.conf"
 
 setup_nerd_font() {

@@ -44,6 +44,8 @@ mk_project() {
     test -d "$PROJECT_DIR" || mkdir "$PROJECT_DIR"
 }
 
+# Can be used to ensure a directory exists.
+# Does not actually leave the terminal context in the destination directory.
 cd_project() {
     cd "$PROJECT_DIR" || panic "Project $PROJECT does not exist"
 }

@@ -1,6 +1,6 @@
 ---
 name: import-sorting
-description: This skill must be used when adding, removing, or changing code imports in any way, or whenever asked to change or sort code imports.
+description: Sort imports in a sensible manner, when the environment doesn't offer a standardized way to do this. Use this skill when adding, removing, or changing code imports that do not support automatic or implicit ordering.
 ---
 
 # Sorting code imports

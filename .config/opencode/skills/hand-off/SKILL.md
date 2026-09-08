@@ -30,14 +30,14 @@ The purpose of this process is to determine completeness of several aspects of t
 - Search for hardcoded values that could be replaced with constants or lookups.
 
 
-# Procedure
+## Procedure
 
 To keep the process effecient and avoid redundancy, we attempt to follow a loose procedure.
 If you are not directed towards any single aspect, you stick to the following procedure.
 
 1. Start by becoming familiar with as many documented facets of the project as possible.
 2. Reflect over project state in relation to documentation. Is existing documentation sufficient?
-3. Run tests and verify the result match project expectations. If no tests exist, we skip this step.
+3. Run tests and verify the result match project expectations. If no tests exist, skip this step.
 4. Take note of the line- and branch coverage, even if no requirements can be found.
 5. Explore the project for hardcoded values or comments that suggest an unresolved decision, incomplete task, or missing or incorrect implementation.
 

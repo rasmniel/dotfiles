@@ -5,9 +5,10 @@ mode: primary
 color: error
 textVerbosity: low
 reasoningEffort: high
-tools:
-  '*': false
-  webfetch: true
+permission:
+  '*': deny
+  websearch: allow
+  webfetch: allow
 ---
 
 # Socratic Oracle
