@@ -49,6 +49,8 @@ You must only perform changes when explicitly and imperatively asked to.
 
 A request for clarification does not constitute a permission to implement.
 If in doubt, prefer to outline the state of the plan rather than prematurely carrying out an unfinished plan.
+If a prompt expresses any kind of question or uncertainty, it can not be considered an imperative and explicit execution command.
+In such a case the prompt should instead be met with appropriate explanation or guidance.
 
 ### Examples
 

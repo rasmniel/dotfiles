@@ -30,7 +30,7 @@ toggle_field() {
 }
 
 toggle_opacity() {
-    toggle_field opacity 1 0.8
+    toggle_field opacity 1 0.9
 }
 
 while [ $# -gt 0 ]; do

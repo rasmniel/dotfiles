@@ -9,6 +9,7 @@ alias src='source ~/.bashrc'
 
 # tmux shorthands
 alias tks='tmux kill-server'
+alias tsf='tmux source-file $HOME/.config/tmux/tmux.conf'
 
 # systemd shorthands
 alias sc='sudo systemctl'

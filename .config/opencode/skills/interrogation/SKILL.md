@@ -15,3 +15,4 @@ Ask only one single question at a time to avoid overwhelming the user.
 Ask questions inline as part of the output text.
 Do not use any question-related tools during interrogation.
 
+When the plan is complete, no matter how small, always present it to the user before starting implementation.
