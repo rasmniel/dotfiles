@@ -7,6 +7,7 @@ set -Eeuo pipefail
 
 . "$SCRIPT_ROOT/source.sh"
 . "$(dirname "$0")/git.sh"
+. "$(dirname "$0")/bootstrap.sh"
 
 test -z "${1:-}" && panic "No command provided."
 
@@ -19,8 +20,8 @@ really=false # required for uninstalls.
 
 # Ensure command argument.
 case "$COMMAND" in
-    create|clone|migrate|remove) ;;
-    *) panic "Usage: pm <create|clone|migrate|remove> <project>" ;;
+    create|clone|bootstrap|migrate|remove) ;;
+    *) panic "Usage: pm <create|clone|bootstrap|migrate|remove> <project>" ;;
 esac
 shift
 
@@ -59,12 +60,14 @@ case "$COMMAND" in
 
     create)
         mk_project
-        cd_project
         ;;
 
     clone)
         clone_project
-        cd_project
+        ;;
+
+    bootstrap)
+        bootstrap
         ;;
 
     migrate)

@@ -9,6 +9,8 @@ DynamicUser=yes
 
 WorkingDirectory=/srv/@service
 ExecStart=@exec
+Environment=PORT=@port
+Environment=@env
 
 TemporaryFileSystem=/srv:ro
 BindReadOnlyPaths=/srv/@service

@@ -6,6 +6,8 @@ Wants=network-online.target
 [Service]
 User=@user
 ExecStart=@exec
+Environment=PORT=@port
+Environment=@env
 
 Restart=on-failure
 RestartSec=3s

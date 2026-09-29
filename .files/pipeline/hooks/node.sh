@@ -17,9 +17,16 @@ post_install__node() {
 
 service_exec__node() {
     local service="$1"
-    local port="$2"
     local main
     main="$(jq -r '.main' package.json)"
     test -z "$main" || [ "$main" = "null" ] && panic "Node application $service does not declare package.main"
-    printf "%s" "/srv/$service/bin/node /srv/$service/$main --port=$port"
+    printf "%s" "/srv/$service/bin/node /srv/$service/$main"
+}
+
+service_env__node() {
+    if [ -n "$PUBLIC_DOMAIN" ]; then
+        printf "NODE_ENV=production"
+    else
+        printf "NODE_ENV=development"
+    fi
 }
