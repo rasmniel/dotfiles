@@ -6,15 +6,27 @@ __exec_start() {
     printf "%s" "$exec"
 }
 
+__inject_env() {
+    local env=""
+    env="$(hook service_env "$FLAVOR" "$SERVICE")"
+    test -z "$env" && panic "Flavor \"$FLAVOR\" provided no environment."
+
+    printf "%s" "$env"
+}
+
 __create_service_file() {
     local template="$1"
 
     local service_file="/etc/systemd/system/$SERVICE.service"
     test -f "$service_file" && sudo rm "$service_file"
+
     sudo cp "$template" "$service_file"
     sudo sed -i -e "s|@service|$SERVICE|g" "$service_file"
-    sudo sed -i -e "s|@user|$USER|g" "$service_file"
     sudo sed -i -e "s|@exec|$(__exec_start)|g" "$service_file"
+    sudo sed -i -e "s|@port|$PORT|g" "$service_file"
+    sudo sed -i -e "s|@env|$(__inject_env)|g" "$service_file"
+    # User is only relevant for local services.
+    sudo sed -i -e "s|@user|$USER|g" "$service_file"
     sudo chmod 644 "$service_file"
     sudo chown root:root "$service_file"
 
