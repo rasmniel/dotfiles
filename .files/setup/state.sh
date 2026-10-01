@@ -16,6 +16,7 @@ state() {
         ufw) test "$(grep "^ENABLED=" /etc/ufw/ufw.conf)" = "ENABLED=yes" && enabled=true ;;
         font) test -d "$FONTS_DIR/JetBrainsMono" && enabled=true ;;
         keepass) command -v flatpak > /dev/null && flatpak info org.keepassxc.KeePassXC > /dev/null 2>&1 && enabled=true ;;
+        lazy) command -v lazygit > /dev/null && command -v lazydocker > /dev/null && enabled=true ;;
         *) command -v "$1" > /dev/null && enabled=true ;;
     esac
 

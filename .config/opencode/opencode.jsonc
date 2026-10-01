@@ -4,7 +4,7 @@
     "default_agent": "Tabula Rasa",
     "lsp": true,
     "experimental": {
-        "disable_paste_summary": true,
+        "disable_paste_summary": true
     },
     "agent": {
         "plan": {
@@ -42,5 +42,12 @@
             // npx
             "npx *": "deny"
         }
+    },
+    "plugin": [
+      "@slkiser/opencode-quota@latest"
+    ],
+    "provider": {
+      "anthropic": {},
+      "openai": {}
     }
 }

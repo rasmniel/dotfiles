@@ -23,9 +23,9 @@ set enable-bracketed-paste on
 set enable-active-region off
 
 # Enable and configure vi-mode.
-set editing-mode vi
+# set editing-mode vi
 # Improve vi-mode in prompt.
-set show-mode-in-prompt on
+set show-mode-in-prompt off
 # Cursor character options for vi-mode editing.
 # | Type        | Blink     | Steady
 # |-------------|-----------|-------

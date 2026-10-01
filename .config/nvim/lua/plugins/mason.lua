@@ -62,7 +62,7 @@ local lsps = {
     jsonls = {},
 
     bashls = {},
-    -- systemd_ls = {},
+    systemd_lsp = {},
 
     hls = {
         filetypes = { 'haskell', 'lhaskell', 'cabal' },
@@ -76,7 +76,6 @@ local lsps = {
         end,
     },
 
-    csharp_ls = {},
     gopls = {},
     kotlin_lsp = {
         cmd = {
@@ -84,6 +83,8 @@ local lsps = {
             '--stdio',
         },
     },
+    -- C# LSP, requires `dotnet >= 10.0` runtime to install.
+    roslyn_ls = {}
 }
 
 local formatters = {

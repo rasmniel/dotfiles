@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# NOTE: This setup script is aimed towards Ubuntu/Debian distros.
+#   Some scripts may work for other distros.
+
 # Suppress warning about dynamically sourced files.
 # shellcheck disable=SC1090
 # shellcheck disable=SC1091
@@ -25,7 +28,7 @@ mkdir -p "$FONTS_DIR"
 
 # Source package aliases.
 SETUP_ROOT="$(dirname "$0")"
-for p in "$SETUP_ROOT/packages/"*; do . "$p"; done
+for package in "$SETUP_ROOT/packages/"*; do . "$package"; done
 . "$SETUP_ROOT/state.sh"
 
 if [ -z "${1:-}" ]; then
@@ -35,6 +38,8 @@ if [ -z "${1:-}" ]; then
     print_li "apt" "Setup default apt packages." "$(state_bullet "apt")" "$(state_color "apt")"
     print_li "nvim" "Setup Neovim 0.11 from official repository." "$(state_bullet "nvim")" "$(state_color "nvim")"
     print_li "opencode" "Setup Opencode with official install script." "$(state_bullet "opencode")" "$(state_color "opencode")"
+    print_li "lazy" "Setup lazygit and lazydocker from official install scripts." "$(state_bullet "lazy")" "$(state_color "lazy")"
+    print_li "fastfetch" "Setup fastfetch binary from script." "$(state_bullet "fastfetch")" "$(state_color "fastfetch")"
     print_li "font" "Setup JetBrainsMono nerd font." "$(state_bullet "font")" "$(state_color "font")"
     print_li "keepass" "Setup KeePassXC with Flatpak." "$(state_bullet "keepass")" "$(state_color "keepass")"
     print_li "brave" "Setup Brave browser from official third-party repository." "$(state_bullet "brave-browser")" "$(state_color "brave-browser")"
@@ -54,6 +59,9 @@ while [ $# -gt 0 ]; do
         apt) setup_apt ;;
         nvim) setup_nvim ;;
         font) setup_nerd_font ;;
+        opencode) setup_opencode ;;
+        lazy) setup_lazygit && setup_lazydocker ;;
+        fastfetch) setup_fastfetch ;;
         keepass) setup_keepass ;;
         brave) setup_brave ;;
         caddy) setup_caddy ;;
