@@ -40,6 +40,8 @@ service_status() {
     local service_source="$SERVICE_ROOT/$SERVICE"
     local service_dest="$SERVER_ROOT/$SERVICE"
 
+    echo "Service status:"
+
     if [ ! -d "$service_source" ]; then
         print_failure "Not a known service:" "$SERVICE"
     elif [ ! -d "$service_dest" ]; then
