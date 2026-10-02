@@ -22,6 +22,11 @@
     },
     "permission": {
         "bash": {
+            "*": "ask",
+            "find *": "deny",
+            // HTTP capable commands
+            "curl *": "deny",
+            "wget *": "deny",
             // alias
             "alias": "deny",
             "alias *": "deny",
