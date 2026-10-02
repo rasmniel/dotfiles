@@ -36,30 +36,43 @@ local PRETTIER_CONFIG = {
     '.prettierrc.toml',
 }
 
-return {
-    uses_prettier = function(bufnr)
-        local root = require('extras.buf_root').get_buf_root_by_marker(bufnr, 'package.json')
+local M = {}
 
-        if root then
-            -- Check for supported prettier config files.
-            for _, config in ipairs(PRETTIER_CONFIG) do
-                if vim.fn.filereadable(root .. '/' .. config) == 1 then
-                    return true
-                end
+M.alerted = false
+
+M.alert = function()
+    if not M.alerted then
+        vim.notify('Using prettier as formatter')
+    end
+    M.alerted = true
+end
+
+M.uses_prettier = function(bufnr)
+    local root = require('extras.buf_root').get_buf_root_by_marker(bufnr, 'package.json')
+
+    if root then
+        -- Check for supported prettier config files.
+        for _, config in ipairs(PRETTIER_CONFIG) do
+            if vim.fn.filereadable(root .. '/' .. config) == 1 then
+                M.alert()
+                return true
             end
-            -- Check for embedded prettier config in package files.
-            for config, field in pairs(PACKAGE_CONFIG) do
-                local ok, lines = pcall(vim.fn.readfile, root .. '/' .. config)
-                if ok then
-                    for _, line in ipairs(lines) do
-                        if string.find(line, field, 1, true) ~= nil then
-                            return true
-                        end
+        end
+        -- Check for embedded prettier config in package files.
+        for config, field in pairs(PACKAGE_CONFIG) do
+            local ok, lines = pcall(vim.fn.readfile, root .. '/' .. config)
+            if ok then
+                for _, line in ipairs(lines) do
+                    if string.find(line, field, 1, true) ~= nil then
+                        M.alert()
+                        return true
                     end
                 end
             end
         end
-        -- Prettier is not applicable for the given buffer.
-        return false
-    end,
-}
+    end
+    -- Prettier is not applicable for the given buffer.
+    return false
+end
+
+return M

@@ -4,6 +4,7 @@
 	r = reset
 	c = commit
 	p = push
+	pom = push -u origin main
 	m = merge
 	b = branch
 	ba = branch -av
