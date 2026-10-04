@@ -6,14 +6,15 @@ description: Design, review, and evolve React transport architecture through cle
 # React integration architecture
 
 Build an understandable path from external data to reactive state and actions.
-Define responsibilities clearly, implement the architectural slices that provide value, and omit abstractions that add only ceremony.
+Define responsibilities clearly, implement only the structure that provides value, and omit abstractions that add ceremony.
+
 
 ## Applying the architecture
 
 Use this skill as a preferred integration pattern, not a mandatory framework.
 Preserve suitable established implementations. When a responsibility lacks an implementation, use the fitting reference as the default.
 An implementation is suitable when it keeps transport responsibilities behind the integration boundary, provides an intentional readable data contract, gives reactive state a deliberate owner, and exposes predictable execution and failure behavior.
-Adopt architectural slices independently; do not introduce parallel infrastructure or restructure established code merely to match the examples.
+Choose implementations independently across responsibility boundaries; do not introduce parallel infrastructure or restructure established code merely to match the examples.
 
 Read current integration code, its consumers, and relevant project guidance before proposing or making changes.
 Match established conventions and distinguish architectural improvements from unrelated restructuring.
@@ -33,29 +34,30 @@ Do not burden a small application with speculative infrastructure simply because
 
 The references provide concrete, usable implementations whose scope and contracts can be inspected before adoption.
 Models do not require the reference hooks, operations do not depend on React state, and context safeguards do not require particular models or clients.
-Connect slices through inputs and results, not assumptions about another slice's implementation.
+Connect implementations through explicit contracts, not undocumented assumptions about their internal structure.
 Keep cohesion within an implementation: the reference hooks share a lifecycle primitive, an internal hook owning their common execution behavior, to maintain consistency without duplication.
 
 
 ## Responsibility map
 
-An architectural slice is a responsibility-focused part of the system, such as transport, models, or integration hooks.
+A horizontal layer groups related responsibilities across features, such as transport, operations, or React integration.
+Models are readable data representations used across these layers, not a separate layer.
 A boundary defines where responsibilities separate; an implementation is the concrete code that fulfills them.
 An integration capability is a read or action exposed to consumers with the data or execution state needed to use it.
 
-| Architectural slice | Owns |
+| Responsibility | Typical owner |
 | --- | --- |
-| API client | External communication, transport configuration, request and response contracts |
-| Integration operations | Client invocation, request packaging, response-to-model mapping |
-| Models | Readable data contracts and associated computed values |
-| Integration hooks | Focused integration capabilities connected to React lifecycle state |
-| Application composition | Application state, coordinated actions, and shared ownership |
-| Application UI | Presentation and user interaction using integration and application-facing capabilities |
+| External communication, transport configuration, request and response contracts | API clients |
+| Client invocation, request packaging, response-to-model mapping | Integration operations |
+| Readable data representation and associated computed values | Models |
+| Reactive lifecycle and focused integration capabilities | Lifecycle mechanisms and integration hooks |
+| Application state, coordinated actions, and shared ownership | Application composition |
+| Presentation and user interaction using integration and application-facing capabilities | Application UI |
 
 The normal responsibility relationship is:
 
 ```
-API client → operations → integration hooks → optional application composition → application UI
+API client → operations → integration hooks → application composition → application UI
 ```
 
 Operations establish readable data contracts, mapping responses where needed.
@@ -95,8 +97,7 @@ Introduce a separate input contract when a form or workflow has genuinely differ
 ## Readable models
 
 A readable data contract defines the meaning and structure of data exposed to consumers; a model is its representation.
-Preserve a suitable established representation, including interface-based models.
-Interfaces can define the data's shape while pure functions provide mapping or computation.
+Preserve a suitable established representation, where a modeling approach exists.
 When no modeling approach exists and a distinct readable model provides value, use getter-only classes based on `ApiModel` as the default.
 
 Models follow the readable data contract independently of the lifecycle mechanism that exposes them to React.
@@ -120,7 +121,7 @@ Keep transient write inputs separate from readable model instances.
 An integration operation accepts inputs, invokes a configured client, and returns a result or rejects.
 An execution is one invocation of asynchronous work, whether an operation or another callback.
 Operations package transport requests and establish readable results without knowing about React state.
-The operations slice can be implemented with functions, classes, or service modules.
+The operations layer can be implemented with functions, classes, or service modules.
 
 An operation may retain its configured client, but it does not retain loaded application data, manage loading flags, update contexts, or mount providers.
 This separation keeps transport integration usable without React and makes its execution path easy to follow.
@@ -144,7 +145,7 @@ Use a suitable existing mechanism or choose an implementation that meets the pro
 Keep client invocation and response mapping in operations, regardless of which mechanism owns the reactive lifecycle.
 
 Read [the optional asynchronous hook reference](references/async-hooks.md) when a lightweight implementation is useful or when examining one concrete realization of these responsibilities.
-It provides `useAsyncOperation`, `useObject`, `useList`, and `useAction` with explicit scope and lifecycle contracts.
+It provides `useAsyncOperation`, `useOne`, `useList`, and `useAction` with explicit scope and lifecycle contracts.
 
 Resource state holds readable data associated with a requested resource; execution state reports pending work and failures.
 Lifecycle state refers to the combined state managed by the lifecycle mechanism.
@@ -155,6 +156,11 @@ Define when reads execute and how input changes affect the requested resource.
 Automatic reads on mount and on relevant input changes are a useful default.
 Expose the data and execution state consumers need, making initial loading, background work, and failures understandable.
 Make refresh and reset behavior clear when exposed to consumers.
+
+Refresh updates hook-owned read state; report its failures through that state rather than propagating them to callers.
+Expose refresh as a non-rejecting `Promise<void>`: awaiting it waits for the attempt to settle but does not establish success or guarantee a committed React render.
+Callers may await refresh for sequencing or initiate it without awaiting when follow-up work should proceed independently.
+Use an explicit result-bearing action when a workflow needs a read result and per-call failure handling.
 
 Distinguish data that has not loaded from a successful empty result.
 For example, `undefined` and `[]` convey different states.
@@ -186,7 +192,8 @@ If a lifecycle mechanism uses explicit dependencies, declare all inputs that sho
 Expose failures consistently, preserving useful error information.
 
 Make failure behavior explicit so callers can reliably compose operations.
-Rejecting explicit calls allows ordinary `try`/`catch` and promise composition; mechanisms with other failure APIs need equally clear contracts.
+Rejecting explicit action calls allows ordinary `try`/`catch` and promise composition; mechanisms with other failure APIs need equally clear contracts.
+Read refresh handles contain their execution's rejection after lifecycle error reporting, so consumers do not need repeated catch-and-discard guards.
 Automatically initiated work should expose failures through its lifecycle without leaving unhandled rejections.
 
 Keep error interpretation with knowledgeable code.
@@ -194,12 +201,13 @@ Operations and lifecycle mechanisms should not invent universal meanings or reco
 
 Distinguish a successful write from unsuccessful follow-up work.
 A completed mutation does not become unsuccessful merely because a subsequent read failed.
+Mutation-success feedback and refresh-failure feedback are independent; expose refresh errors for presentation without making them reject the completed mutation.
 Define what a composed action promises to complete and expose follow-up failures through their appropriate state or contract.
 
 ### Overlapping work
 
 Handle concurrency in proportion to the interaction.
-Loading state and disabled controls can prevent ordinary conflicting actions.
+UI loading states and disabled controls can prevent ordinary conflicting actions.
 When multiple operations form one coordinated interaction, compose them into one action with understandable progress, completion, and failure semantics.
 
 Prevent obsolete results from replacing state they no longer represent.
@@ -208,7 +216,7 @@ Define what happens to pending work when a consumer resets or unmounts, respecti
 Preventing obsolete state updates does not necessarily cancel the underlying request or stop its promise settling for a caller.
 
 Keep that protection effective wherever the result is stored.
-A composing architectural slice that awaits a result and writes separate state must consider obsolescence too; protection of the underlying hook's state does not protect caller-owned state automatically.
+Composition code that awaits a result and writes separate state must consider obsolescence too; protection of the underlying hook's state does not protect caller-owned state automatically.
 
 Do not add general-purpose locks or workflow infrastructure where clear action composition and interaction state are sufficient.
 
@@ -237,7 +245,7 @@ Do not judge architecture by where a hook is called.
 Direct UI consumption is appropriate when responsibilities remain intact.
 Extract repeated coordination and state-control patterns into a useful hook or context under ordinary DRY reasoning.
 
-Expose a meaningful application-facing contract rather than forwarding every endpoint or bundling complete hook results.
+Expose a meaningful application-facing contract rather than forwarding the complete hook result to every endpoint or bundling.
 Make clear:
 
 - Which data the composition owns.
@@ -253,7 +261,7 @@ Application composition owns the additional coordination or state it actually in
 Derive values from their source where possible.
 An editable draft can be intentionally independent state; make that distinction explicit rather than keeping accidental copies synchronized.
 
-Coordinate related operations in the application composition slice when they constitute an application workflow.
+Coordinate related operations through application composition when they constitute an application workflow.
 Refreshing, replacing known state, or leaving results local are different consistency choices, not mandatory mutation steps.
 Keep the chosen policy with the behavior that requires it.
 
@@ -282,7 +290,6 @@ Use `useRequiredContext` when no equivalent safeguard is in place: it reports mi
 Keep provider absence distinguishable from ordinary loading or unavailable data inside the provided value.
 The reference uses `undefined` as its absence sentinel; preserve suitable existing sentinels or mechanisms.
 Preserve intentional context defaults: optional provider consumption is a different contract.
-This helper fails fast; it is not a React Error Boundary or an error-presentation mechanism.
 
 Read [the contexts and providers reference](references/contexts-and-providers.md) when implementing dependency provision or required-context consumption.
 It includes the safeguard and dedicated consumption-hook example, with guidance on absence sentinels and existing consumers.
@@ -303,7 +310,5 @@ Use these questions to check whether the architecture is understandable and valu
 - How is configuration supplied, and what happens when it changes?
 - Are failures and obsolete results handled where their affected state is owned?
 - Which abstraction solves a present problem, and which merely adds ceremony?
-- Can each architectural slice work with suitable alternatives in adjacent slices?
+- Do the contracts between layers allow their implementations to change independently?
 
-Do not expand this skill into project initialization, UI design, testing strategy, or exhaustive React rules.
-Its purpose is a clear, adaptable transport-to-reactive-state architecture.

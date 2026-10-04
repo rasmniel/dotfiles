@@ -4,8 +4,7 @@ Read this reference when implementing getter-only models or mapping readable tra
 Use its class-based model implementation as the default when no suitable modeling approach exists and a distinct readable model provides value.
 Preserve suitable existing representations, including plain interfaces with pure mapping or computation functions; this reference does not require a migration to classes.
 The examples show one coherent boundary: operations invoke clients and establish readable results; React-side state owners decide when those values replace existing state.
-Adapt names and module organization to the project without changing these responsibilities.
-The model implementation is independent of React, operations, and lifecycle mechanisms. Adopt it without adopting the other references.
+The model implementation is independent of React, operations, and lifecycle mechanisms. It can be adopted without adopting the other references.
 
 ## `ApiModel`
 
