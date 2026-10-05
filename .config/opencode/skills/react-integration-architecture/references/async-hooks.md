@@ -51,6 +51,10 @@ Operations perform mapping before results reach the hooks. Application compositi
 
 ## `useAsyncOperation.ts`
 
+This shared asynchronous lifecycle boundary coordinates automatic reads, explicit executions, resets, and unmounting through one state owner.
+Its latest-started policy requires tighter execution tracking than ordinary application code.
+The execution counter implements that specific contract; it is not a baseline for effects, application hooks, or state setters.
+
 The lifecycle primitive owns lifecycle state and execution identity tracking.
 A ref supplies the committed callback to a stable execution handle; an execution counter prevents older completions from replacing newer lifecycle state.
 Update the callback ref in a layout effect, not during render, so an interrupted or discarded render cannot replace the callable operation.
@@ -134,7 +138,8 @@ export function useAsyncOperation<TArguments extends unknown[], TResult>(
 ```
 
 This protects the primitive's state, not arbitrary state written by a caller after awaiting a result.
-Keep any additional result ownership and concurrency decisions with the code that owns that additional state.
+That distinction does not imply that callers need their own execution counters or guards.
+If caller-owned state has a concrete stale-result race, flag the discrepancy and examine whether consolidating execution and state ownership removes it before introducing additional coordination.
 The loading flag describes the current execution, not the number of outstanding promises.
 The mount flag rejects completion updates after unmount, while the counter distinguishes overlapping executions and invalidates work across reset or remount.
 Invoke execution handles from interactions or effects, not during render. When composing layout effects, declare the consuming effect after the lifecycle hook so its callback ref has been updated first.

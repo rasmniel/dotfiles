@@ -210,13 +210,19 @@ Handle concurrency in proportion to the interaction.
 UI loading states and disabled controls can prevent ordinary conflicting actions.
 When multiple operations form one coordinated interaction, compose them into one action with understandable progress, completion, and failure semantics.
 
-Prevent obsolete results from replacing state they no longer represent.
-The optional reference uses a latest-started execution policy; other mechanisms may associate results with resource identities or use another suitable policy.
-Define what happens to pending work when a consumer resets or unmounts, respecting the state owner's lifetime.
-Preventing obsolete state updates does not necessarily cancel the underlying request or stop its promise settling for a caller.
+Do not introduce synchronization for hypothetical overlaps.
+If existing execution paths appear to require additional coordination for correctness, flag the discrepancy and explain which competing executions or input changes could overwrite state incorrectly.
+First examine whether execution and state ownership are fragmented, and consider consolidating the interaction rather than layering guards onto separate paths.
+Establish the intended behavior before implementing additional coordination; some overlaps are inherent to changing resource inputs rather than fragmented ownership.
 
-Keep that protection effective wherever the result is stored.
-Composition code that awaits a result and writes separate state must consider obsolescence too; protection of the underlying hook's state does not protect caller-owned state automatically.
+The optional reference is a shared asynchronous lifecycle boundary with a deliberate latest-started execution policy across automatic reads, explicit executions, resets, and unmounting.
+Its tighter execution tracking implements that specific contract, not a baseline for ordinary effects, application hooks, or state setters.
+Do not copy its ref-based counters or invalidate state setters merely because application code awaits a result.
+
+A lifecycle mechanism protects its own state, not separate state assigned by callers.
+That distinction does not itself establish a race or require additional guards; identify and discuss a concrete discrepancy before extending protection to caller-owned state.
+Where an established lifecycle contract handles obsolete results, respect its state ownership and reset or unmount behavior.
+Preventing obsolete state updates does not necessarily cancel the underlying request or stop its promise settling for a caller.
 
 Do not add general-purpose locks or workflow infrastructure where clear action composition and interaction state are sufficient.
 
@@ -288,11 +294,10 @@ Do not introduce instance management for operation functions that already have a
 For contexts that require a provider, prefer a dedicated consumption hook or preserve an equivalent safe consumption API.
 Use `useRequiredContext` when no equivalent safeguard is in place: it reports missing providers at consumption rather than allowing misleading failures later.
 Keep provider absence distinguishable from ordinary loading or unavailable data inside the provided value.
-The reference uses `undefined` as its absence sentinel; preserve suitable existing sentinels or mechanisms.
 Preserve intentional context defaults: optional provider consumption is a different contract.
 
 Read [the contexts and providers reference](references/contexts-and-providers.md) when implementing dependency provision or required-context consumption.
-It includes the safeguard and dedicated consumption-hook example, with guidance on absence sentinels and existing consumers.
+It includes the safeguard and dedicated consumption-hook example, application-facing context example, and guidance on existing consumers.
 
 When working on existing context consumption, replace unsafe assertions or placeholder defaults with this safeguard where appropriate.
 Changing an intentional default to a required-provider contract requires an explicit decision.
@@ -308,7 +313,6 @@ Use these questions to check whether the architecture is understandable and valu
 - Who owns asynchronous state, and what do reads and actions promise?
 - How do hooks and contexts compose without duplicating responsibilities or state?
 - How is configuration supplied, and what happens when it changes?
-- Are failures and obsolete results handled where their affected state is owned?
+- Are failures handled where their affected state is owned?
 - Which abstraction solves a present problem, and which merely adds ceremony?
 - Do the contracts between layers allow their implementations to change independently?
-

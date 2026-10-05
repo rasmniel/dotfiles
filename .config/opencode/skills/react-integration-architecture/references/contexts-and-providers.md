@@ -24,29 +24,60 @@ export function useRequiredContext<T>(context: Context<T | undefined>, name: str
 This is a fail-fast consumption contract, not a React Error Boundary or an error-presentation mechanism.
 It throws an actionable error; it does not render recovery UI.
 
-## Dedicated consumption hook
+## Application-facing context
 
-For this implementation, use `undefined` as the absence sentinel and expose a hook specific to the context.
-This composition fragment assumes the application's existing `IntegrationValue` type; it does not define a new context value contract:
+Contexts should offer a dedicated consumption hook using `useRequiredContext`.
+With conceptual implementation, the `EntityContext` can provide `Entity` models and their mutation handles to the application layer.
 
-```ts
+```tsx
 import { createContext } from 'react'
 
 import { useRequiredContext } from './useRequiredContext'
 
-const IntegrationContext = createContext<IntegrationValue | undefined>(undefined)
+interface EntityContextValue {
+    data: Entity[]
+}
 
-export const useIntegrationContext = () =>
-    useRequiredContext(IntegrationContext, 'Integration')
+const EntityContext = createContext<EntityContextValue| undefined>(undefined)
+
+export default function EntityProvider({ children }: PropsWithChildren) {
+    const [entities, isLoading, error, refresh] = useEntities()
+    const [isCreating, createError, create] = useCreateEntity()
+    const [isReplacing, replaceError, replace] = useReplaceEntity()
+    const [isDeleting, deleteError, remove] = useDeleteEntity()
+
+    const createEntity = async (request: CreateEntityRequest) => {
+        const entity = await create(request)
+
+        await refresh()
+
+        return entity
+    }
+
+    const replaceEntity = async (id: string, request: UpdateEntityRequest) => {
+        const entity = await replace(id, request)
+
+        await refresh()
+
+        return entity
+    }
+
+    const deleteEntity = async (id: string) => {
+        await remove(id)
+
+        await refresh()
+    }
+
+    return <EntityContext.Provider value={value}>{children}</EntityContext.Provider>
+})
+
+export const useEntityContext = () => useRequiredContext(EntityContext, 'Entity')
 ```
 
-`IntegrationValue` stands for the configured integration dependencies or owned state supplied by the corresponding provider.
+`DataContextValue` stands for the configured dependencies or owned state supplied by the corresponding provider.
 The local import illustrates the relationship between the helper and context; adapt its location to the project.
 Consumers use the dedicated hook rather than repeating checks or asserting that the context must exist.
 
-The provided value exists even when some data inside it has not loaded.
-Represent loading and unavailable data inside that value, not by making the entire context value `undefined`.
-Otherwise, the absence sentinel cannot distinguish a missing provider from ordinary resource state.
 
 ## Intentional defaults and existing consumers
 
@@ -57,6 +88,7 @@ Preserve suitable existing safeguards, including those using a different absence
 When working on existing consumption, replace unsafe assertions or placeholder defaults where the provider is already required.
 First distinguish a typing placeholder from an intentional fallback: replacing the latter with a throw changes behavior.
 Do not initiate an unrelated migration or change an optional provider into a required one without an explicit decision.
+
 
 ## Provider responsibilities
 
@@ -71,3 +103,4 @@ Dependent hooks must observe those changes; memoization serves this lifetime con
 
 A shared context is not a mandatory intermediary for every integration hook.
 Use application hooks and contexts for application composition and shared ownership without exposing internal clients or operation collections to UI consumers.
+
