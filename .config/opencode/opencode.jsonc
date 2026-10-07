@@ -22,7 +22,6 @@
     },
     "permission": {
         "bash": {
-            "*": "ask",
             "find *": "deny",
             // HTTP capable commands
             "curl *": "deny",
@@ -49,10 +48,10 @@
         }
     },
     "plugin": [
-      "@slkiser/opencode-quota@latest"
+        "@slkiser/opencode-quota@latest"
     ],
     "provider": {
-      "anthropic": {},
-      "openai": {}
+        "anthropic": {},
+        "openai": {}
     }
 }
