@@ -37,8 +37,6 @@ require('lazy').setup({
 
     require('plugins.rainbowcsv'),
 
-    require('plugins.kulala'),
-
     require('plugins.tidal'),
 
     require('plugins.csharpls'),

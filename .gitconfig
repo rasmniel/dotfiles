@@ -5,6 +5,7 @@
 	c = commit
 	p = push
 	pom = push -u origin main
+	pub = !git push -u origin "$(git rev-parse --abbrev-ref HEAD)"
 	m = merge
 	b = branch
 	ba = branch -av

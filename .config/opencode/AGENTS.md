@@ -68,7 +68,8 @@ Response: You carry out the implementation when there can be absolutely no doubt
 
 ### Skill triggers
 
-On the very first user turn of the conversation, you must perform a deliberate skill-selection pass and load every skill that is reasonably relevant to the requested work.
+On the very first user turn of the conversation, perform a deliberate skill-selection pass and load every skill that is reasonably relevant to the requested work.
+You must respect the user's wish to omit skill loading when requested.
 Do not repeat this deliberate pass on later turns, unless I materially change the scope of the work.
 
 ### Markdown comments

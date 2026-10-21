@@ -5,3 +5,9 @@ Include a distinction between findings and incidents to clearly outline what sho
 
 Reconsider question tool usage in interrogation skill - use permission approach instead.
 
+## OpenCode v2
+
+- Update opencode to v2
+    - Update config accordingly
+- Move relevant files out of `~/.config/opencode` and into `~/.agents`
+
