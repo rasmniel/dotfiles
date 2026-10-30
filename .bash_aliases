@@ -30,6 +30,11 @@ alias log='run_script "$HOME/.files/log/log.sh"'
 alias revision='run_script "$HOME/.files/revision/revision.sh"'
 alias backup_notes='revision "$HOME/notes" main "$HOME/notes/revision.md"'
 
+# Note conflict resolution
+alias resolve_conflicts='run_script "$HOME/.files/conflict/conflict.sh"'
+alias resolve_notes='resolve_conflicts ~/notes'
+
+
 # cd shorthands
 alias srv='cd /srv && la'
 alias sys='cd /etc/systemd/system'

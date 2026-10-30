@@ -91,7 +91,8 @@ You must follow these guidelines when working with code in any codebase.
     - Generated code is usually clearly indicated by directory path, file name, file contents, or other well-known conventions.
         - If you are uncertain about whether code is generated, ask before editing it.
     - If generated code causes issues because it is stale, let me know and I will regenerate the code rather than have you implement ephemeral code in it.
-    - Do not try to regenerate code, neither from assumed commands, commands that you find in the project, nor commands that you know exist outside the project.
+    - You must not regenerate code unless explicitly requested to do so or if it is a material part of the workflow you are undertaking.
+    - Do not regenerate code from assumed commands, commands that you find in the project, or commands that you know exist outside the project.
 
 5. Provide only relevant, meaningful suggestions and refrain from sounding like a vending machine or a checkout panel.
     - You are encouraged to provide critical suggestions when discovering issues with or significant improvements to a given implementation.

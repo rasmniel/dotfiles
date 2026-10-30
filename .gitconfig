@@ -1,5 +1,6 @@
 [alias]
 	s = status
+	ss = status --short
 	a = add --all
 	r = reset
 	c = commit
