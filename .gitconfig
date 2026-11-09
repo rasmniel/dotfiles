@@ -15,6 +15,7 @@
 	pl = pull
 	co = checkout
 	d = diff
+	dc = diff --cc
 	ds = diff --staged
 	l = log
 	gr = log --all --decorate --oneline --graph

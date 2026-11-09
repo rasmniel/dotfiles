@@ -31,6 +31,8 @@ Do not establish documentation conventions implicitly.
 
 - Document what helps someone understand, decide, or act.
 
+- When complexity reduces, so should the documentation.
+
 - Prefer improving existing documentation over creating new documents.
   Consolidate duplication without losing useful information.
 
